@@ -82,3 +82,45 @@ svg {
 	width: 100%;
 	height: auto;
 }
+
+html, #content, header {
+	font-family: var(--serif) !important;
+	font-weight: 400;
+	box-sizing: border-box;
+	width: 100% !important;
+}
+html {
+	overflow-x: hidden;
+}
+.visualContainer {
+	position: sticky;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100vh;
+	overflow: hidden;
+}
+
+
+.step {
+	pointer-events: none;
+	height: auto;
+	min-height: 0vh;
+	position: relative;
+	padding: 50vh 0 50vh;
+	box-sizing: content-box;
+}
+.step p {
+	padding: 1rem;
+}
+.step .textContainer {
+	background:  white;
+	border:  1px solid black;
+	max-width:  300px;
+	margin:  0 auto;
+}
+@media screen and (max-width: 600px) {
+	.step {
+		padding: 70vh 0 150vh;
+	}
+}
