@@ -1,15 +1,24 @@
 <script>
 	import Scrolly from "$components/helpers/Scrolly.svelte";
 	import Text from "$components/MiddleSchool/MiddleSchool.Text.svelte";
-    let { data, copy } = $props();
-    let value = $state();
-    
-</script>
+	import EyeContainer from "$components/MiddleSchool/MiddleSchool.EyeContainer.svelte";
 
+	export let data, copy; // Non-reactive copy
+	let value = null; // Reactive state variable for value
+	let attribute = null;
+
+	$: {
+		attribute = copy.story[value]?.attribute || null;
+	}
+</script>
+<svelte:options runes="{false}" />
 <div class="outsideContainer">
 	<section id="scrolly">
 		<div class="visualContainer">
 			<span class="panda">{value || "🐼"}</span>
+
+			<EyeContainer {data} {value} {attribute}/>
+
 		</div>
 		<Scrolly bind:value top={100}>
 			{#each copy.story as step_obj, i}
@@ -25,12 +34,11 @@
 <style>
 	.panda {
 		position: absolute;
-		left:  50%;
-		top:  50%;
-		text-align:  center;
-		font-size: 100px;
+		left:  0%;
+		top:  0%;
+		text-align:  left;
+		font-size: 20px;
 		width:  100px;
 		height:  100px;
-		transform: translate(-50%, -50%);
 	}
 </style>

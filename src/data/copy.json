@@ -1,1 +1,1 @@
-{"hed":"Middle school","dek":"TKTKTK","story":[{"type":"1","addclass":"","text":"This is some text."},{"type":"2","addclass":"","text":"This is some other text."},{"type":"3","addclass":"","text":"And some other."}]}
+{"hed":"Middle school","dek":"TKTKTK","story":[{"type":"1","text":"This is some text."},{"type":"2","attribute":"Belonging","addclass":"","text":"This is some other text."},{"type":"3","attribute":"Classroom Teacher-Student Relationships","text":"And some other."}]}
