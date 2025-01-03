@@ -1,103 +1,103 @@
 <script>
 	import { onMount } from "svelte";
-	
+
 	export let side, rand;
 
-	let eyewhiteStyle = "height: 18%;"; // Default height
-	let browStyle = "top: 40%;"; // Default brow position
+	// Configuration for dimensions and timing
+	const config = {
+		baseHeight: rand * 4 + 25, // Base height percentage
+		baseWidth: 20 + rand * 2, // Base width percentage
+		blinkDuration: 100, // Blink duration in ms
+		minBlinkInterval: 2000, // Minimum interval between blinks
+		maxBlinkIntervalMultiplier: 8, // Multiplier for max blink interval
+	};
 
-	// Function to simulate blinking and brow movement
+	let eyewhiteStyle, browStyle; // Styles for the eye and brow
+	let baseEyewhiteStyle, baseBrowStyle; // Base styles
+	let blinkInterval;
+
+	// Generate styles for the eye and brow
+	function generateStyle(height, top, isBrow = false) {
+		if (isBrow) {
+			return `top: ${top}%;`;
+		}
+		return `height: ${height}%; top: ${top}%;`;
+	}
+
+	// Initialize base styles
+	function initializeBaseStyles() {
+		baseEyewhiteStyle = generateStyle(config.baseHeight, 40);
+		baseBrowStyle = generateStyle(0, 20, true); // Brow starts slightly above
+		eyewhiteStyle = baseEyewhiteStyle;
+		browStyle = baseBrowStyle;
+	}
+
+	// Blink animation
 	function blink() {
-		eyewhiteStyle = "height: 0%;"; // Shrink eye white
-		browStyle = "top: 43%;"; // Move brow down by 3px
+		// Close the eye from the center outward
+		eyewhiteStyle = generateStyle(0, 50); // Collapse height to 0 from center
+		browStyle = generateStyle(0, 25, true); // Lower the brow slightly
+
+		// Revert to base styles after the blink duration
 		setTimeout(() => {
-			eyewhiteStyle = "height: 18%;"; // Restore eye white
-			browStyle = "top: 40%;"; // Move brow back up
-		}, 200); // Duration of the blink
+			eyewhiteStyle = baseEyewhiteStyle;
+			browStyle = baseBrowStyle;
+		}, config.blinkDuration);
 	}
 
 	onMount(() => {
-		setInterval(() => {
-			// Randomly decide whether to blink
-			if (Math.random() > 0.95) { // Adjust probability as needed
-				blink();
-			}
-		}, Math.random() * 3000 + 1000); // Random interval between blinks (1s to 4s)
+		initializeBaseStyles();
+
+		// Calculate random blink interval
+		blinkInterval = Math.max(
+			config.minBlinkInterval,
+			rand * config.maxBlinkIntervalMultiplier * 1000
+		);
+
+		// Trigger periodic blinking
+		setInterval(blink, blinkInterval);
 	});
-
-
 </script>
 
+
 <svelte:options runes="{false}" />
+
 <div class="{side}eye oneeye">
-	<div class="brow" style="{browStyle}"></div>
-	<div class="eyewhite" style="{eyewhiteStyle}">
-		<div class="eyecolor">
-			<div class="eyeblack"></div>
-		</div>
-	</div>
+	<img class="eyewhite" style="{eyewhiteStyle}" src="assets/app/eye0{side}.png" />
+	<img class="brow" style="{browStyle}" src="assets/app/brow0{side}.png" />
 </div>
-
-
 <style>
 	.eye {
+		position: absolute;
 		background: white;
-		border:  1px solid #666;
-		position: absolute;
-		transition-timing-function: cubic-bezier(0.740, 0.160, 0.250, 1.000);
-		box-shadow:  inset 2px 2px 12px 2px #000;
+		border: 1px solid #666;
+		box-shadow: inset 2px 2px 12px 2px #000;
+		transition: all 0.2s ease-in-out;
 	}
+
 	.oneeye {
+		width: 50%;
+		height: 100%;
 		position: absolute;
-		left:  0px;
-		top:  0px;
-		width:  50%;
-		height:  100%;
 	}
+
 	.righteye {
-		left:  50%;
+		left: 50%;
 	}
+
+	.eyewhite {
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+		transition: all 0.2s ease-in-out;
+	}
+
 	.brow {
 		position: absolute;
 		left: 50%;
-		top: 40%;
-		transform: translate(-50%, -50%);
 		width: 50%;
-		height: 4px;
-		border-top-left-radius: 70%;
-		border-top-right-radius: 70%;
-		border: 2px solid black;
-		border-bottom: 0;
-	}
-	.eyewhite {
-		position: absolute;
-		left:  50%;
-		top:  60%;
-		transform:  translate(-50%, -50%);
-		width: 45%;
-		border-radius: 50%;
-		height:  10%;
-		background:  white;
-		border:  1px solid #666;
-		overflow: hidden;
-	}
-	.eyecolor {
-		position: absolute;
-		left:  50%;
-		top:  40%;
-		transform:  translate(-50%, -50%);
-		height: 120%;
-		width: 8px;
-		background:  #999;
-		border-radius: 50%;
-	}
-	.eyeblack {
-		position: absolute;
-		left:  50%;
-		top:  50%;
-		transform:  translate(-50%, -50%);
-		height: 3px;
-		width: 3px;
-		background: black;
+		height: 8px;
+		transform: translateX(-50%);
+		transition: all 0.2s ease-in-out;
 	}
 </style>
