@@ -29,6 +29,16 @@
   --color-green: #34a29e;
   --color-red: #ff533d;
   --color-yellow: #e5e338;
+/*   --color-hl: #edb42d;
+  --bgcolor: #1a1919; */
+  --color-hl: #e251f5;
+  --color-light: #efd5f2;
+  --color-dark: #b30089;
+  --bgcolor: #9c839e;
+  --color-elementary: #1e0024;
+  --color-middle: #1e0024;
+/*   --color-middle: #0d060d; */
+  --color-high: #1e0024;
   --12px: 0.75rem;
   --14px: 0.875rem;
   --16px: 1rem;

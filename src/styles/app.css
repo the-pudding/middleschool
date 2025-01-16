@@ -35,7 +35,6 @@
 	--color-input-bg: var(--color-gray-50);
 	--color-input-fg: var(--color-gray-900);
 	--color-placeholder: var(--color-gray-500);
-
 	/* "1" second duration */
 	--1s: 1ms;
 }
@@ -84,11 +83,12 @@ svg {
 }
 
 html, #content, header {
-	font-family: var(--serif) !important;
+	font-family: var(--sans) !important;
 	font-weight: 400;
 	box-sizing: border-box;
 	width: 100% !important;
-	background: #000;
+	background: var(--bgcolor);
+	color: var(--color-light);
 }
 html {
 	overflow-x: hidden;
@@ -101,27 +101,114 @@ html {
 	height: 100vh;
 	overflow: hidden;
 }
-
+.visualContainer .hedContainer {
+	position: absolute;
+	width:  100%;
+	text-align:  center;
+	bottom: 75%;
+	color:  var(--color-light);
+}
+.hedContainer h1 {
+	font-size:  20px;
+}
+.hedContainer h3 {
+	font-size:  16px;
+}
+.hedContainer h3 a {
+	color: var(--color-hl);
+	text-decoration: none;
+	border-bottom:  1px solid var(--color-hl);
+}
 
 .step {
 	pointer-events: none;
 	height: auto;
+	font-size: 17px;
 	min-height: 0vh;
 	position: relative;
-	padding: 50vh 0 50vh;
+	padding: 30vh 0 100vh;
 	box-sizing: content-box;
+	color:  white;
 }
-.step p {
-	padding: 1rem;
-}
-.step .textContainer {
-	background:  white;
-	border:  1px solid black;
-	max-width:  300px;
-	margin:  0 auto;
+@media screen and (max-width: 860px) {
+	.step {
+		font-size: 16px;
+	}
 }
 @media screen and (max-width: 600px) {
 	.step {
-		padding: 70vh 0 150vh;
+		font-size: 15px;
 	}
 }
+.hidden.step {
+	display:  none;
+}
+.bigText.step {
+	background: linear-gradient(
+		to bottom,
+		transparent 0%, /* Start with the background color */
+		var(--bgcolor) 30%, /* Fade to transparent at the top */
+		var(--bgcolor) 70%, /* Background color in the middle */
+		transparent 100% /* Fade to transparent at the bottom */
+	);
+	min-height: 100vh;
+	margin: 30vh 0;
+	position: relative;
+}
+
+.step .textContainer {
+	background:  black;
+	border:  1px solid var(--bgcolor);
+	max-width: 520px;
+	width: 95%;
+	margin:  0 auto;
+	padding: 1.2rem;
+	line-height: 1.6em;
+}
+.bigText.step .textContainer {
+	left:  50%;
+	top:  50%;
+	position: absolute;
+	transform: translate(-50%, -50%);
+	background: linear-gradient(
+		to bottom,
+		transparent 0%, /* Start with the background color */
+		var(--bgcolor) 30%, /* Fade to transparent at the top */
+		var(--bgcolor) 70%, /* Background color in the middle */
+		transparent 100% /* Fade to transparent at the bottom */
+	);
+	color:  var(--color-light);
+	border:  none;
+	padding: 0 30px;
+	max-width: 600px;
+	width: 100%;
+}
+.step p a {
+	color:  white;
+	border-bottom:  0.5px dotted white;
+	text-decoration: none;
+}
+.step .textContainer p label {
+	background: var(--color-dark);
+	padding: 0px 2px;
+	border-radius: 3px;
+}
+
+.textContainer p:first-child {
+	padding-top:  0px;
+	margin-top:  0px;
+}
+
+.textContainer p:last-child {
+	padding-bottom:  0px;
+	margin-bottom:  0px;
+}
+.step .textContainer .citation {
+	font-size: 14px;
+	opacity: 0.8;
+}
+/* @media screen and (max-width: 600px) {
+	.step {
+		
+	}
+} */
