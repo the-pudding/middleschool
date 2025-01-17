@@ -12,6 +12,10 @@
 </header>
 
 <style>
+	header {
+		background-image:  url('assets/app/grain.png');
+		background-size: 200px 200px;
+	}
 	.wordmark {
 		max-width: 14em;
 		margin: 0 auto;

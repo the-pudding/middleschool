@@ -136,7 +136,7 @@
 		height:  40px;
 		padding:  5px;
 		margin-top: 20px;
-		color: var(--b30089);
+		color: #b30089;
 		font-weight: bold;
 		text-transform: uppercase;
 	}

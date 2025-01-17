@@ -100,13 +100,15 @@ html {
 	width: 100%;
 	height: 100vh;
 	overflow: hidden;
+	background-image:  url('assets/app/grain.png');
+	background-size: 200px 200px;
 }
 .visualContainer .hedContainer {
 	position: absolute;
 	width:  100%;
 	text-align:  center;
 	bottom: 75%;
-	color:  var(--color-light);
+	color:  var(--color-dark);
 }
 .hedContainer h1 {
 	font-size:  20px;
@@ -128,7 +130,6 @@ html {
 	position: relative;
 	padding: 30vh 0 100vh;
 	box-sizing: content-box;
-	color:  white;
 }
 @media screen and (max-width: 860px) {
 	.step {
@@ -147,23 +148,28 @@ html {
 	background: linear-gradient(
 		to bottom,
 		transparent 0%, /* Start with the background color */
-		var(--bgcolor) 30%, /* Fade to transparent at the top */
-		var(--bgcolor) 70%, /* Background color in the middle */
+		var(--bgcolor) 15%, /* Fade to transparent at the top */
+		var(--bgcolor) 85%, /* Background color in the middle */
 		transparent 100% /* Fade to transparent at the bottom */
 	);
 	min-height: 100vh;
+	height: 100%;
 	margin: 30vh 0;
+/* 	padding:  50vh 0; */
 	position: relative;
 }
 
 .step .textContainer {
-	background:  black;
-	border:  1px solid var(--bgcolor);
+	background:  #fed4ff;
+	color:  var(--color-dark);
+/* 	border:  1px solid var(--bgcolor); */
 	max-width: 520px;
 	width: 95%;
 	margin:  0 auto;
 	padding: 1.2rem;
 	line-height: 1.6em;
+	box-shadow: 0px 0px 10px -6px #000;
+	pointer-events: all;
 }
 .bigText.step .textContainer {
 	left:  50%;
@@ -177,21 +183,29 @@ html {
 		var(--bgcolor) 70%, /* Background color in the middle */
 		transparent 100% /* Fade to transparent at the bottom */
 	);
-	color:  var(--color-light);
+	color: #f3ebf5;
 	border:  none;
 	padding: 0 30px;
 	max-width: 600px;
 	width: 100%;
+	box-shadow: none;
 }
 .step p a {
-	color:  white;
-	border-bottom:  0.5px dotted white;
+	color:  var(--color-hl);
+	border-bottom:  1px dashed var(--color-hl);
 	text-decoration: none;
 }
+.bigText.step .textContainer p a {
+	color:  #fff;
+	border-bottom:  1px dashed #fff;
+}
 .step .textContainer p label {
-	background: var(--color-dark);
-	padding: 0px 2px;
-	border-radius: 3px;
+    background: #f5a7fa; /* Highlight color */
+    padding: 0 2px; /* Add consistent horizontal padding */
+    border-radius: 2px; /* Optional for rounded corners */
+    box-decoration-break: clone; /* Ensures padding and background on line breaks */
+    -webkit-box-decoration-break: clone; /* For Safari compatibility */
+    display: inline; /* Keeps the text inline and allows natural line wrapping */
 }
 
 .textContainer p:first-child {

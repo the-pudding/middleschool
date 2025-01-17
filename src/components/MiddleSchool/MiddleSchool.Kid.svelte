@@ -2,9 +2,9 @@
 	import { onMount } from "svelte";
 	import Eye from "$components/MiddleSchool/MiddleSchool.Eye.svelte";
 	export let d, attribute, positionLookup, kid_id, exclude, grade, sort_attribute;
-	let rand = seededRandom(d.id);
+	let rand = seededRandom(d.id + 8);
 	let rand2 = seededRandom(d.id + 2);
-	let rand3 = seededRandom(d.id + 5);
+	let rand3 = seededRandom(d.id + 1);
 	let color = getColor(d.student_race, d.student_ethnicity, grade, d[attribute]);
 
 	
@@ -70,7 +70,7 @@
 	top: {positionLookup[d.id].y}px;
 	width: {positionLookup[d.id].w}px;
 	height: {positionLookup[d.id].h}px;
-/* 	opacity: {positionLookup[d.id].opacity}; */
+	opacity: {positionLookup[d.id].opacity};
 	transition: all {positionLookup[d.id].speed}ms cubic-bezier(0.420, 0.000, 0.580, 1.000); 
 ">
 

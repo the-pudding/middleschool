@@ -4,7 +4,7 @@
 	export let rand, rand2, rand3, light, side, grade, color;
 	let ty = 0;
 	let tx = 0;
-	let time = 300;
+	let time = 800;
 
 	const imageNumbers = 9;
 	const randImage = Math.floor(Math.abs(rand) * imageNumbers);
@@ -13,7 +13,7 @@
 
 	// Configuration for dimensions and timing
 	const config = {
-		baseHeight: 2 + Math.round(Math.abs(rand) * 2) + ageAdjustEye(grade, "height"),
+		baseHeight: 1.5 + Math.round(Math.abs(rand) * 1.5) + ageAdjustEye(grade, "height"),
 		baseWidth: 25 + Math.round(Math.abs(rand) * 5) + ageAdjustEye(grade, "width"),
 		baseHeightBrow: 10 + Math.round(Math.abs(rand) * 5) + ageAdjustBrow(grade, "height"),
 		baseWidthBrow: 35 + Math.round(Math.abs(rand) * 5) + ageAdjustBrow(grade, "width"),
@@ -30,7 +30,7 @@
 	};
 
 	function ageAdjustEye(g) {
-		return (20 - (g*1.5));
+		return (20 - (g));
 	}
 	function ageAdjustBrow(g) {
 		return (g - 4)*2;
@@ -129,8 +129,8 @@
 	const randTy = createRandBetween(rand2); // Seed for ty
 
 	function meander() {
-	    tx = randTx(-6, 6); // Meander tx
-	    ty = randTy(-4, 4); // Meander ty
+	    tx = randTx(-(14 - grade)*rand, (14- grade)*rand ); // Meander tx
+	    ty = randTy( (-(14 - grade)/1.5)*rand, ((14- grade)/1.5)*rand ); // Meander ty
 	}
 
 	function checkEyes() {
@@ -176,8 +176,12 @@
 <svelte:options runes="{false}" />
 <div class="{side}eye oneeye {light}" style="transform: translate({tx}%,{ty}%);">
 	<div class="side_wrapper" style="background: {color};">
-		
-		<div class="ear" style="background: {color}; height: {15 + Math.abs(rand)*10}%; width: {15 + Math.abs(rand2)*5}%; top: {45 + Math.abs(rand2)*10}%;"></div>
+		<img
+		class="hair back" 
+		style="top: 2%; height: {140 + (rand*20)}%;"
+		src="assets/app/hair{randImage3}_{side}.png"
+		/>
+		<div class="ear" style="background: {color}; height: {15 + Math.abs(rand)*10}%; width: {10 + Math.abs(rand2)*5}%; top: {45 + Math.abs(rand2)*10}%;"></div>
 		<div class="nose" style="{noseStyle}"></div>
 		<div class="eyewhite{light}_wrapper">
 			{#if light == "on"}
@@ -201,14 +205,26 @@
 		/>
 		<img
 		class="hair" 
-		style="top: -5%; height: {100 + (rand*10)}%;"
+		style="top: -8%; height: {100 + (rand*10)}%;"
 		src="assets/app/hair{randImage3}_{side}.png"
 		/>
 	</div>
 	<div class="grain"></div>
+	<!-- <div class="sort_attribute">{randImage3}</div> -->
 </div>
 
 <style>
+	.sort_attribute {
+		position: absolute;
+		left:  4px;
+		bottom:  4px;
+		color:  white;
+		font-family: var(--sans);
+		z-index: 100;
+		font-size: 15px;
+		font-weight:  bold;
+		text-shadow:  0px 0px 8px #000;
+	}
 /* 	.eye {
 		position: absolute;
 		background: white;
@@ -231,13 +247,22 @@
 	}
 	.hair.back {
 		z-index: -1;
+		width: 120%;
 	}
 	.lefteye .hair {
-		left: -15%;
+		left: -10%;
 	}
 	.righteye .hair {
-		right: -15%;
+		right: -10%;
 	}
+	.righteye  .hair.back {
+		left: 0%;
+		right:  auto;
+	} 
+	.lefteye  .hair.back {
+		right: 0%;
+		left:  auto;
+	} 
 	.ear {
 		position: absolute;
 		transition: all 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750); /* linear */
@@ -245,11 +270,13 @@
 	}
 	.lefteye .ear {
 		right: 94%;
-		border-radius: 50%;
+		border-radius: 50% 0% 0% 50%;
+		border-right: 2px solid rgba(0,0,0,0.1);
 	}
 	.righteye .ear {
 		left: 94%;
-		border-radius: 50%;
+		border-radius: 0% 50% 50% 0;
+		border-left: 2px solid rgba(0,0,0,0.1);
 	}
 	.lefteye .nose {
 		right:  1%;
@@ -333,7 +360,7 @@
 	}
 	.grain {
 		background-image:  url('assets/app/grain.png');
-		background-size: 200% 200%;
+		background-size: 240% 200%;
 		width: 100%;
 		height: 100%;
 		position: absolute;
