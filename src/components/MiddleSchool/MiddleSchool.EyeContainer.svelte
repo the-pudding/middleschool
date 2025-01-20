@@ -48,7 +48,7 @@
 
 		// move hl_kid to beginning
 		if (attribute == "id") {
-			const index = positionDataCopy.findIndex(obj => obj.id == hl_kid);
+			const index = positionDataCopy.findIndex(obj => obj.id == kid_id);
 			if (index !== -1) {
 				const [item] = positionDataCopy.splice(index, 1);
 				positionDataCopy.unshift(item);
@@ -102,6 +102,9 @@
 	onMount(() => {
 		handleResize();
 		checkZoom();
+		setInterval(function() {
+			checkZoom();
+		}, 200);
 		loaded = true;
 	});
 
@@ -112,13 +115,13 @@
 			padding = 10;
 			borderPadding = 15;
 		} else if (containerWidth < 280) {
-			w = containerWidth/3.5;
+			w = containerWidth/3;
 			h = w/2;
 			padding = 3;
 			borderPadding = 5;
 		} else {
-			w = 80;
-			h = 40;
+			w = 100;
+			h = 50;
 			padding = 8;
 			borderPadding = 12;
 		}
@@ -152,15 +155,14 @@
 			const target = positionLookup[positionDataCopy[0]?.id];
 			let scale = 2;
 			if (containerWidth < 200) {
-				scale = 2;
+				scale = 3;
 			} else if (containerWidth < 666) {
 				scale = 2;
 			} else {
 				scale = 1.5;
 			}
 			if (target) {
-				
-				zoomStyle = `margin-top: -30%; transform: scale(${scale}) translate(${(containerWidth / 2 - (target.x + target.w / 2))}px, ${(containerHeight / 2 - (target.y + target.h))}px);`;
+				zoomStyle = `margin-top: -${containerHeight/10 + target.h}px; transform: scale(${scale}) translate(${(containerWidth / 2 - (target.x + target.w / 2))}px, ${(containerHeight / 2 - (target.y + target.h))}px);`;
 				if (loaded) {
 					zoomStyle = zoomStyle + " " + transZoom;
 				}
@@ -170,8 +172,10 @@
 				zoomStyle = transZoom;
 			}
         	// zoomStyle = ''; // Reset zoom
-        }
+		}
 	}
+
+
 
 
 	// Reactive statement to recalculate positions when value or attribute changes
@@ -181,7 +185,7 @@
 			calculatePositions();
 			checkZoom();
 		}
-    }
+	}
 </script>
 
 <svelte:options runes="{false}" />

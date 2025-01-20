@@ -77,7 +77,7 @@
 	<Eye side="left" {color} {rand} {rand2} {rand3} light={positionLookup[d.id].light} {grade}/>
 	<Eye side="right" {color} {rand} {rand2} {rand3} light={positionLookup[d.id].light} {grade}/>
 	<!-- <div class="sort_attribute">{Math.round(d[sort_attribute])}</div> -->
-	<!-- <div class="sort_attribute">{positionLookup[d.id].light}</div> -->
+	<!-- <div class="sort_attribute">{d.id}</div> -->
 </div>
 
 
@@ -94,7 +94,7 @@
 		text-shadow:  0px 0px 8px #000;
 	}
 	.eye {
-		background: #ffe0fe;
+		background: #fff0ff;
 		border:  1px solid #000;
 		position: absolute;
 		overflow:  hidden;

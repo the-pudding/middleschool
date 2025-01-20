@@ -148,8 +148,8 @@ html {
 	background: linear-gradient(
 		to bottom,
 		transparent 0%, /* Start with the background color */
-		var(--bgcolor) 15%, /* Fade to transparent at the top */
-		var(--bgcolor) 85%, /* Background color in the middle */
+		var(--color-light) 15%, /* Fade to transparent at the top */
+		var(--color-light) 85%, /* Background color in the middle */
 		transparent 100% /* Fade to transparent at the bottom */
 	);
 	min-height: 100vh;
@@ -176,14 +176,8 @@ html {
 	top:  50%;
 	position: absolute;
 	transform: translate(-50%, -50%);
-	background: linear-gradient(
-		to bottom,
-		transparent 0%, /* Start with the background color */
-		var(--bgcolor) 30%, /* Fade to transparent at the top */
-		var(--bgcolor) 70%, /* Background color in the middle */
-		transparent 100% /* Fade to transparent at the bottom */
-	);
-	color: #f3ebf5;
+	background:  none;
+	color: var(--color-dark);
 	border:  none;
 	padding: 0 30px;
 	max-width: 600px;
@@ -196,8 +190,11 @@ html {
 	text-decoration: none;
 }
 .bigText.step .textContainer p a {
-	color:  #fff;
-	border-bottom:  1px dashed #fff;
+	color:  var(--color-dark);
+	border-bottom:  1px dashed var(--color-dark);
+}
+.bigText.step .textContainer p a:hover {
+	border-bottom:  1px solid var(--color-dark);
 }
 .step .textContainer p label {
     background: #f5a7fa; /* Highlight color */

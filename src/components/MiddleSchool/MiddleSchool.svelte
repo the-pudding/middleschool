@@ -144,25 +144,25 @@
 		.gradeLevel {
 			font-size:  24px;
 			height:  40px;
-			padding:  8px;
+			padding:  8px 0;
 		}
 	}
 	@media screen and (max-width: 600px) {
 		.gradeLevel {
 			font-size:  20px;
 			height:  40px;
-			padding:  10px;
+			padding:  10px 0;
 		}
 	}
 	@media screen and (max-width: 500px) {
 		.gradeLevel {
 			font-size:  16px;
 			height:  40px;
-			padding:  12px;
+			padding:  12px 0;
 		}
 	}
 	.slidingContainer {
-		transition: all 1200ms cubic-bezier(0.250, 0.100, 0.250, 1.000); /* ease (default) */
+		transition: left 1200ms cubic-bezier(0.250, 0.100, 0.250, 1.000); /* ease (default) */
 		transition-timing-function: cubic-bezier(0.250, 0.100, 0.250, 1.000); /* ease (default) */
 		position: absolute;
 		width:  100%;
