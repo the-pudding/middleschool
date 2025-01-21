@@ -6,7 +6,7 @@
 
 	const hl_index = 511; // Highlighted item ID
 
-	export let data, kid_id, hl_kid, sorted, value, attribute, exclude, sort_attribute;
+	export let data, kid_id, hl_kid, sorted, value, attribute, exclude, sort_attribute, proportions, grade;
 	let oldvalue = -1;
 	let loaded = false;
 	let positionDataCopy = [];
@@ -59,6 +59,10 @@
 		const startX = (containerWidth - gridWidth) / 2;
 
 		positionLookup = {};
+		let attribute_grade_proportions = proportions[attribute] ?? 100;
+		const targetOnCount = Math.round((attribute_grade_proportions / 100) * positionDataCopy.length);
+		let onCount = 0;
+
 		positionDataCopy.forEach((d, index) => {
 			const row = Math.floor(index / cols);
 			const col = index % cols;
@@ -70,17 +74,14 @@
 			if (exclude) {
 				light = "on";
 			}
-			if (attribute == "id") {
-				light = "on";
-			}
-			if (v == "") {
-				light = "none"
-			}
 			if (v >= 4) {
 				light = "on";
 			}
 			if (kid_id == d.id) {
 				light = "on";
+			}
+			if (light == "on") {
+				onCount++;
 			}
 			let opacity = 1;
 			if (kid_id != null && kid_id != d.id) {
@@ -94,6 +95,31 @@
 			}
 			positionLookup[d.id] = { x, y, w, h, v, speed, opacity, light };	
 		});
+
+		// Adjust to match targetOnCount
+		if (targetOnCount > onCount) {
+		    let needed = targetOnCount - onCount;
+		    for (let i = positionDataCopy.length - 1; i >= 0 && needed > 0; i--) {
+		        if (positionLookup[positionDataCopy[i].id].light === "off") {
+		            positionLookup[positionDataCopy[i].id].light = "on";
+		            positionDataCopy[i].light = "on"; // Keep consistent
+		            onCount++;
+		            needed--;
+		        }
+		    }
+		} else if (targetOnCount < onCount) {
+		    let excess = onCount - targetOnCount;
+		    for (let i = 0; i < positionDataCopy.length && excess > 0; i++) {
+		        if (positionLookup[positionDataCopy[i].id].light === "on") {
+		            positionLookup[positionDataCopy[i].id].light = "off";
+		            positionDataCopy[i].light = "off"; // Keep consistent
+		            onCount--;
+		            excess--;
+		        }
+		    }
+		}
+
+		console.log(grade + ": " + targetOnCount + " // " + onCount);
 	}
 
 

@@ -7,5 +7,10 @@ export default [
 		"id": "176OwTV_abBSWm-dXYBKF1S2DV07_b_0VZubuk4Yn1KU",
 		"gid": "0",
 		"filepath": "src/data/data.csv"
+	},
+	{
+		"id": "176OwTV_abBSWm-dXYBKF1S2DV07_b_0VZubuk4Yn1KU",
+		"gid": "907165395",
+		"filepath": "src/data/proportions.csv"
 	}
 ]

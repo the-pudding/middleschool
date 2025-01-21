@@ -4,7 +4,7 @@
 	import Text from "$components/MiddleSchool/MiddleSchool.Text.svelte";
 	import EyeContainer from "$components/MiddleSchool/MiddleSchool.EyeContainer.svelte";
 
-	export let data, copy; // Non-reactive copy
+	export let data, copy, proportions; // Non-reactive copy
 	let offset = 0;
 	let marginLeft = 0;
 	let kid_id = null;
@@ -83,30 +83,32 @@
 		<div class="visualContainer">
 			<div class="slidingContainer" style="left: {marginLeft}%;">
 				{#each allGrades as grade, i}
-				{#if grades.indexOf(grade) !== -1}
-				<div 
-				class="gradeContainer {getGradeColor(grade)}" 
-				style="left: {i * 33.3333333333}%;" 
-				transition:fade>
-				<div class="gradeLevel">
-					{#if kid_id == null}
-					<span transition:fade>{addOrdinalSuffix(grade)} grade</span>
-					{/if}
-				</div>
+					{#if grades.indexOf(grade) !== -1}
+						<div 
+						class="gradeContainer {getGradeColor(grade)}" 
+						style="left: {i * 33.3333333333}%;" 
+						transition:fade>
+							<div class="gradeLevel">
+								{#if kid_id == null}
+								<span transition:fade>{addOrdinalSuffix(grade)} grade</span>
+								{/if}
+							</div>
 
-				<EyeContainer 
-				data={transformedData[grade]} 
-				{value} 
-				{attribute} 
-				{sort_attribute}
-				exclude={excluded.includes(grade)} 
-				{kid_id} 
-				{hl_kid} 
-				{sorted} 
-				/>
-			</div>
-			{/if}
-			{/each}
+							<EyeContainer 
+								data={transformedData[grade]} 
+								{value} 
+								{attribute} 
+								{sort_attribute}
+								{grade}
+								exclude={excluded.includes(grade)} 
+								{kid_id} 
+								{hl_kid} 
+								{sorted} 
+								proportions={proportions[(grade - 4)]}
+							/>
+						</div>
+					{/if}
+				{/each}
 		</div>
 
 		{#if intro}

@@ -2,8 +2,6 @@
 	import { onMount } from "svelte";
 
 	export let rand, rand2, rand3, light, side, grade, color;
-	let ty = 0;
-	let tx = 0;
 	let time = 800;
 
 	const imageNumbers = 9;
@@ -16,9 +14,9 @@
 		baseHeight: 1.5 + Math.round(Math.abs(rand) * 1.5) + ageAdjustEye(grade, "height"),
 		baseWidth: 25 + Math.round(Math.abs(rand) * 5) + ageAdjustEye(grade, "width"),
 		baseHeightBrow: 10 + Math.round(Math.abs(rand) * 5) + ageAdjustBrow(grade, "height"),
-		baseWidthBrow: 35 + Math.round(Math.abs(rand) * 5) + ageAdjustBrow(grade, "width"),
-		baseTop: 50 + Math.round(Math.abs(rand) * 3),
-		baseTopBrow: 49 + Math.round(Math.abs(rand) * 10),
+		baseWidthBrow: 45 + Math.round(Math.abs(rand) * 5) + ageAdjustBrow(grade, "width"),
+		baseTop: 60 + Math.round(Math.abs(rand) * 3),
+		baseTopBrow: 55 + Math.round(Math.abs(rand) * 10),
 		baseTranslateX: side === "right" ? 20 - Math.round(rand * 50) : 20 + Math.round(rand * 50),
 		baseTranslateXNose: side === "right" ? -Math.round(rand * 10) - 40 : Math.round(rand * 10) - 40,
 		baseRotate: side === "right" ? -Math.round(rand * 5) : Math.round(rand * 5),
@@ -74,7 +72,7 @@
 
 	// Generate styles for the eye, brow, and nose
 	function generateStyle(width, height, top, translateX, rotate, isBrow = false, isNose = false) {
-		const adj = side === "right" ? 10 * rand : -10 * rand;
+		const adj = side === "right" ? -10 + rand*4 : 10 - rand*4;
 		if (isBrow) {
 			return `width: ${width}%; margin-left: ${adj}%; top: ${top - 4}%; transform: translateX(-50%) rotate(${rotate}deg);`;
 		}
@@ -109,29 +107,7 @@
 		eyewhiteStyle = baseEyewhiteStyle;
 	}
 
-	function seededRandom(seed) {
-		return function () {
-	        // Simple Linear Congruential Generator (LCG) for pseudo-random numbers
-			seed = (seed * 9301 + 49297) % 233280;
-			return seed / 233280;
-		};
-	}
 
-	function createRandBetween(seed) {
-		const random = seededRandom(seed);
-		return function (min, max) {
-			return Math.floor(random() * (max - min + 1)) + min;
-		};
-	}
-
-	// Separate seeded random generators for tx and ty
-	const randTx = createRandBetween(rand); // Seed for tx
-	const randTy = createRandBetween(rand2); // Seed for ty
-
-	function meander() {
-	    tx = randTx(-(14 - grade)*rand, (14- grade)*rand ); // Meander tx
-	    ty = randTy( (-(14 - grade)/1.5)*rand, ((14- grade)/1.5)*rand ); // Meander ty
-	}
 
 	function checkEyes() {
 		if (time > 3000) {
@@ -139,9 +115,9 @@
 		}
 		time++;
 		try {
-			if (time % Math.round(10 + Math.abs(rand)*10) == 0) {
-				meander();
-			}
+			// if (time % Math.round(10 + Math.abs(rand)*10) == 0) {
+			// 	meander();
+			// }
 			if (light == "off") {
 				close();
 			} else {
@@ -174,14 +150,8 @@
 </script>
 
 <svelte:options runes="{false}" />
-<div class="{side}eye oneeye {light}" style="transform: translate({tx}%,{ty}%);">
-	<div class="side_wrapper" style="background: {color};">
-		<img
-		class="hair back" 
-		style="top: 2%; height: {140 + (rand*20)}%;"
-		src="assets/app/hair{randImage3}_{side}.png"
-		/>
-		<div class="ear" style="background: {color}; height: {15 + Math.abs(rand)*10}%; width: {10 + Math.abs(rand2)*5}%; top: {45 + Math.abs(rand2)*10}%;"></div>
+<div class="{side}eye oneeye {light}">
+		<div class="ear" style="background: {color}; height: {20 + Math.abs(rand)*10}%; width: {10 + Math.abs(rand2)*5}%; top: {45 + Math.abs(rand2)*10}%;"></div>
 		<div class="nose" style="{noseStyle}"></div>
 		<div class="eyewhite{light}_wrapper">
 			{#if light == "on"}
@@ -208,8 +178,6 @@
 		style="top: -8%; height: {100 + (rand*10)}%;"
 		src="assets/app/hair{randImage3}_{side}.png"
 		/>
-	</div>
-	<div class="grain"></div>
 	<!-- <div class="sort_attribute">{randImage3}</div> -->
 </div>
 
@@ -269,12 +237,12 @@
 		transition-timing-function: cubic-bezier(0.250, 0.250, 0.750, 0.750); /* linear */
 	}
 	.lefteye .ear {
-		right: 94%;
+		right: 98%;
 		border-radius: 50% 0% 0% 50%;
 		border-right: 2px solid rgba(0,0,0,0.1);
 	}
 	.righteye .ear {
-		left: 94%;
+		left: 98%;
 		border-radius: 0% 50% 50% 0;
 		border-left: 2px solid rgba(0,0,0,0.1);
 	}
@@ -286,19 +254,16 @@
 	} 
 
 	.oneeye {
-		width: 100%;
-		height: 200%;
-		top: -100%;
+		width: 50%;
+		height: 100%;
+		top: 0%;
 		position: absolute;
-		transform-origin: 50% 50%;
+/* 		transform-origin: 50% 50%; */
 		transition: all 0.8s ease-in-out;
 		opacity:  1;
 	}
-	.oneeye.off {
-		opacity:  1;
-	}
 	.lefteye {
-		left: -50%;
+		left: 0%;
 	}
 	.lefteye:after {
 		content: "";
@@ -307,7 +272,7 @@
 		top: 0;
 		width: 60%;
 		height: 200%; /* Ensure it covers the entire element */
-		background: linear-gradient(to right, rgba(40, 0, 48, 1), rgba(40, 0, 48, 0));
+/* 		background: linear-gradient(to right, rgba(40, 0, 48, 1), rgba(40, 0, 48, 0)); */
 		pointer-events: none; /* Optional: Prevent interactions */
 	}
 	.righteye:after {
@@ -317,20 +282,18 @@
 		top: 0;
 		width: 60%;
 		height: 200%; /* Ensure it covers the entire element */
-		background: linear-gradient(to left, rgba(40, 0, 48, 1), rgba(40, 0, 48, 0));
+/* 		background: linear-gradient(to left, rgba(40, 0, 48, 1), rgba(40, 0, 48, 0)); */
 		pointer-events: none; /* Optional: Prevent interactions */
 	}
 
 	.righteye {
-		right: -50%;
+		right: 0%;
 	}
 	.side_wrapper {
 		width:  45%;
 		height: 90%;
 		top: 35%;
 		position: absolute;
-		transition: all 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750); /* linear */
-		transition-timing-function: cubic-bezier(0.250, 0.250, 0.750, 0.750); /* linear */
 	}
 	.lefteye .side_wrapper {
 		left: 55.5%;
@@ -357,12 +320,5 @@
 		transition: all 0.1s ease-in-out;
 		transform-origin: 50% 50%;
 		opacity: 0.6;
-	}
-	.grain {
-		background-image:  url('assets/app/grain.png');
-		background-size: 240% 200%;
-		width: 100%;
-		height: 100%;
-		position: absolute;
 	}
 </style>

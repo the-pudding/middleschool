@@ -5,8 +5,9 @@
 
 	const copy = getContext("copy");
 	import data from "$data/data.json";
+	import proportions from "$data/proportions.json";
 </script>
 
-<MiddleSchool {copy} {data} />
+<MiddleSchool {copy} {data} {proportions}/>
 
 <!-- <Footer recirc={true} /> -->

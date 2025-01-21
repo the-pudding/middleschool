@@ -1,12 +1,15 @@
 <script>
 	import { onMount } from "svelte";
 	import Eye from "$components/MiddleSchool/MiddleSchool.Eye.svelte";
+	import Face from "$components/MiddleSchool/MiddleSchool.Eye.svelte";
 	export let d, attribute, positionLookup, kid_id, exclude, grade, sort_attribute;
 	let rand = seededRandom(d.id + 8);
 	let rand2 = seededRandom(d.id + 2);
 	let rand3 = seededRandom(d.id + 1);
 	let color = getColor(d.student_race, d.student_ethnicity, grade, d[attribute]);
-
+	let ty = 0;
+	let tx = 0;
+	let time = 800;
 	
 	function seededRandom(seed) {
 	    const a = 1664525;
@@ -57,6 +60,49 @@
 	    return adjustColor(randomColor, isLightOn);
 	}
 
+	function meanderRandom(seed) {
+		return function () {
+	        // Simple Linear Congruential Generator (LCG) for pseudo-random numbers
+			seed = (seed * 9301 + 49297) % 233280;
+			return seed / 233280;
+		};
+	}
+
+	function createRandBetween(seed) {
+		const random = meanderRandom(seed);
+		return function (min, max) {
+			return Math.floor(random() * (max - min + 1)) + min;
+		};
+	}
+
+	// Separate seeded random generators for tx and ty
+	const randTx = createRandBetween(rand); // Seed for tx
+	const randTy = createRandBetween(rand2); // Seed for ty
+
+	function meander() {
+	    tx = randTx(-(14 - grade)*rand, (14- grade)*rand ); // Meander tx
+	    ty = randTy( (-(14 - grade)/1.5)*rand, ((14- grade)/1.5)*rand ); // Meander ty
+	}
+
+	function checkMeander() {
+		console.log("hi")
+		if (time > 3000) {
+			time = 0;
+		}
+		time++;
+		try {
+			if (time % Math.round(10 + Math.abs(rand)*10) == 0) {
+				meander();
+			}
+		} catch {
+
+		}
+	}
+
+	onMount(() => {
+		setInterval(checkMeander, 100)
+	});
+
 	$: {
 		color = getColor(d.student_race, d.student_ethnicity, grade, positionLookup[d.id]?.light);
 	}
@@ -73,15 +119,27 @@
 	opacity: {positionLookup[d.id].opacity};
 	transition: all {positionLookup[d.id].speed}ms cubic-bezier(0.420, 0.000, 0.580, 1.000); 
 ">
-
-	<Eye side="left" {color} {rand} {rand2} {rand3} light={positionLookup[d.id].light} {grade}/>
-	<Eye side="right" {color} {rand} {rand2} {rand3} light={positionLookup[d.id].light} {grade}/>
+	<div class="face" style="background: {color}; transform: translate({tx}%,{ty}%);">
+		<Eye side="left" {color} {rand} {rand2} {rand3} light={positionLookup[d.id].light} {grade}/>
+		<Eye side="right" {color} {rand} {rand2} {rand3} light={positionLookup[d.id].light} {grade}/>
+		<div class="grain"></div>
+	</div>
 	<!-- <div class="sort_attribute">{Math.round(d[sort_attribute])}</div> -->
 	<!-- <div class="sort_attribute">{d.id}</div> -->
 </div>
 
 
 <style>
+	.face {
+		position: absolute;
+		left: 15%;
+		width: 70%;
+		bottom:  -5%;
+		height: 100%;
+		border-radius: 50% 50% 0 0;
+		transition: all 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750); /* linear */
+		transition-timing-function: cubic-bezier(0.250, 0.250, 0.750, 0.750); /* linear */
+	}
 	.sort_attribute {
 		position: absolute;
 		left:  4px;
@@ -103,5 +161,13 @@
 	}
 	.eye.off {
 		background: #450040;
+	}
+	.grain {
+		background-image:  url('assets/app/grain.png');
+		background-size: 240% 200%;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		pointer-events: none;
 	}
 </style>
