@@ -6,33 +6,36 @@
 	let rand = seededRandom(d.id + 8);
 	let rand2 = seededRandom(d.id + 2);
 	let rand3 = seededRandom(d.id + 1);
+	const imageNumbers = 9;
+	const randImage = Math.floor(Math.abs(rand2) * imageNumbers);
 	let color = getColor(d.student_race, d.student_ethnicity, grade, d[attribute]);
 	let ty = 0;
 	let tx = 0;
 	let time = 800;
+	const imageType = grade < 6 ? "kid" : "full";
 	
 	function seededRandom(seed) {
-	    const a = 1664525;
-	    const c = 1013904223;
-	    const m = Math.pow(2, 32);
+		const a = 1664525;
+		const c = 1013904223;
+		const m = Math.pow(2, 32);
 
 	    // Scramble the seed with a nonlinear transformation
-	    seed = (seed ^ (seed >>> 21)) * 0x5bd1e995;
-	    seed = (seed ^ (seed >>> 15)) * 0x1b873593;
-	    seed = seed ^ (seed >>> 13);
+		seed = (seed ^ (seed >>> 21)) * 0x5bd1e995;
+		seed = (seed ^ (seed >>> 15)) * 0x1b873593;
+		seed = seed ^ (seed >>> 13);
 
 	    // Apply the linear congruential generator (LCG)
-	    seed = (a * seed + c) % m;
+		seed = (a * seed + c) % m;
 
 	    // Further scramble the output for reduced correlation
-	    const result = (seed ^ (seed >>> 16)) * 0x85ebca6b;
+		const result = (seed ^ (seed >>> 16)) * 0x85ebca6b;
 	    const normalized = Math.abs(result % m) / m; // Normalize to [0, 1)
 	    
 	    return normalized * 2 - 1; // Scale to [-1, 1]
 	}
 
 	function adjustColor(color, isLightOn) {
-	    if (isLightOn === "off") {
+		if (isLightOn === "off") {
 	        // Darken and desaturate the color
 	        const [r, g, b] = color.match(/\w\w/g).map((c) => parseInt(c, 16)); // Convert hex to RGB
 	        const darkenFactor = 0.5; // Adjust for darkness (0.5 = 50% darker)
@@ -45,19 +48,19 @@
 	}
 
 	function getColor(race, eth, grade, isLightOn) {
-	    let colors;
-	    if (race === "Black") {
-		    colors = ["#8a4a80", "#7a3f73", "#97578f", "#854b7d", "#9b6096"];
+		let colors;
+		if (race === "Black") {
+			colors = ["#8a4a80", "#7a3f73", "#97578f", "#854b7d", "#9b6096"];
 		} else if (race === "White" && eth === "Latinx") {
-		    colors = ["#b05496", "#9a4885", "#c169aa", "#a15b91", "#b26a9e"];
+			colors = ["#b05496", "#9a4885", "#c169aa", "#a15b91", "#b26a9e"];
 		} else if (race === "White") {
-		    colors = ["#d28ed4", "#c17fc3", "#e3a1e3", "#ae6ea8", "#c07cb8"];
+			colors = ["#d28ed4", "#c17fc3", "#e3a1e3", "#ae6ea8", "#c07cb8"];
 		} else {
-		    colors = ["#b26ba1", "#9e5a92", "#ca82b5", "#af739e", "#9e608a"];
+			colors = ["#b26ba1", "#9e5a92", "#ca82b5", "#af739e", "#9e608a"];
 		}
 
-	    const randomColor = colors[Math.floor(Math.abs(rand2) * colors.length)];
-	    return adjustColor(randomColor, isLightOn);
+		const randomColor = colors[Math.floor(Math.abs(rand2) * colors.length)];
+		return adjustColor(randomColor, isLightOn);
 	}
 
 	function meanderRandom(seed) {
@@ -85,7 +88,6 @@
 	}
 
 	function checkMeander() {
-		console.log("hi")
 		if (time > 3000) {
 			time = 0;
 		}
@@ -112,33 +114,34 @@
 
 <svelte:options runes="{false}" />
 <div class="eye {positionLookup[d.id].light}" style="
-	left: {positionLookup[d.id].x}px;
-	top: {positionLookup[d.id].y}px;
-	width: {positionLookup[d.id].w}px;
-	height: {positionLookup[d.id].h}px;
-	opacity: {positionLookup[d.id].opacity};
-	transition: all {positionLookup[d.id].speed}ms cubic-bezier(0.420, 0.000, 0.580, 1.000); 
+left: {positionLookup[d.id].x}px;
+top: {positionLookup[d.id].y}px;
+width: {positionLookup[d.id].w}px;
+height: {positionLookup[d.id].h}px;
+opacity: {positionLookup[d.id].opacity};
+transition: opacity 500ms linear, background 500ms linear, left {positionLookup[d.id].speed + 300*rand2}ms cubic-bezier(0.420, 0.000, 0.580, 1.000), top {positionLookup[d.id].speed + 300*rand}ms cubic-bezier(0.420, 0.000, 0.580, 1.000); 
 ">
-	<div class="face" style="background: {color}; transform: translate({tx}%,{ty}%);">
-		<Eye side="left" {color} {rand} {rand2} {rand3} light={positionLookup[d.id].light} {grade}/>
-		<Eye side="right" {color} {rand} {rand2} {rand3} light={positionLookup[d.id].light} {grade}/>
-		<div class="grain"></div>
-	</div>
-	<!-- <div class="sort_attribute">{Math.round(d[sort_attribute])}</div> -->
-	<!-- <div class="sort_attribute">{d.id}</div> -->
+<div class="face" style="background: {color}; transform: translate({tx}%,{ty}%); width: {64 + rand*5}%; left: { (100 - (64 + rand*5))/2 }%;">
+	<Eye side="left" {color} {rand} {rand2} {rand3} light={positionLookup[d.id].light} {grade}/>
+	<Eye side="right" {color} {rand} {rand2} {rand3} light={positionLookup[d.id].light} {grade}/>
+	<div class="grain"></div>
+	<img class="hair" src="assets/app/{imageType}hair{randImage}.png" />
+</div>
+<!-- <div class="sort_attribute">{Math.round(d[sort_attribute])}</div> -->
+<!-- <div class="sort_attribute">{d.id}</div> -->
 </div>
 
 
 <style>
 	.face {
 		position: absolute;
-		left: 15%;
-		width: 70%;
+		left: 18%;
+		width: 64%;
 		bottom:  -5%;
 		height: 100%;
 		border-radius: 50% 50% 0 0;
-		transition: all 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750); /* linear */
-		transition-timing-function: cubic-bezier(0.250, 0.250, 0.750, 0.750); /* linear */
+		transition: background 500ms cubic-bezier(0.420, 0.000, 0.580, 1.000), transform 1500ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+		transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000);
 	}
 	.sort_attribute {
 		position: absolute;
@@ -152,7 +155,7 @@
 		text-shadow:  0px 0px 8px #000;
 	}
 	.eye {
-		background: #fff0ff;
+		background: #ffe6ff;
 		border:  1px solid #000;
 		position: absolute;
 		overflow:  hidden;
@@ -169,5 +172,13 @@
 		height: 100%;
 		position: absolute;
 		pointer-events: none;
+	}
+	.hair {
+		position: absolute;
+		top: -18%;
+		height: 140%;
+		left:-20%;
+		width: 140%;
+		max-width: none;
 	}
 </style>

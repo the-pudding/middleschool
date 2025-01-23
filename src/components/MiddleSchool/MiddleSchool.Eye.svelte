@@ -16,7 +16,7 @@
 		baseHeightBrow: 10 + Math.round(Math.abs(rand) * 5) + ageAdjustBrow(grade, "height"),
 		baseWidthBrow: 45 + Math.round(Math.abs(rand) * 5) + ageAdjustBrow(grade, "width"),
 		baseTop: 60 + Math.round(Math.abs(rand) * 3),
-		baseTopBrow: 55 + Math.round(Math.abs(rand) * 10),
+		baseTopBrow: 55 + Math.round(Math.abs(rand) * 2),
 		baseTranslateX: side === "right" ? 20 - Math.round(rand * 50) : 20 + Math.round(rand * 50),
 		baseTranslateXNose: side === "right" ? -Math.round(rand * 10) - 40 : Math.round(rand * 10) - 40,
 		baseRotate: side === "right" ? -Math.round(rand * 5) : Math.round(rand * 5),
@@ -74,7 +74,7 @@
 	function generateStyle(width, height, top, translateX, rotate, isBrow = false, isNose = false) {
 		const adj = side === "right" ? -10 + rand*4 : 10 - rand*4;
 		if (isBrow) {
-			return `width: ${width}%; margin-left: ${adj}%; top: ${top - 4}%; transform: translateX(-50%) rotate(${rotate}deg);`;
+			return `width: ${width}%; height: ${height}%; margin-left: ${adj}%; top: ${top}%; transform: translateX(-50%) rotate(${rotate}deg);`;
 		}
 		if (isNose) {
 			return `width: 0%; top: ${top - 20}%; transform: translateX(${translateX}%) translateY(10%) rotate(${rotate}deg); ${side === "right" ? `left: ${10 + Math.abs(rand) * 5}%;` : `right: ${Math.abs(rand) * 5}%;`}`;
@@ -118,14 +118,14 @@
 			// if (time % Math.round(10 + Math.abs(rand)*10) == 0) {
 			// 	meander();
 			// }
-			if (light == "off") {
-				close();
-			} else {
+			// if (light == "off") {
+			// 	close();
+			// } else {
 				reset();
 				if (time % Math.round(50 + Math.abs(rand)*50) == 0) {
 					blink();	
 				}	
-			}
+			// }
 		} catch {
 
 		}
@@ -151,33 +151,31 @@
 
 <svelte:options runes="{false}" />
 <div class="{side}eye oneeye {light}">
-		<div class="ear" style="background: {color}; height: {20 + Math.abs(rand)*10}%; width: {10 + Math.abs(rand2)*5}%; top: {45 + Math.abs(rand2)*10}%;"></div>
-		<div class="nose" style="{noseStyle}"></div>
-		<div class="eyewhite{light}_wrapper">
-			{#if light == "on"}
-			<img
-			class="eyewhite eyewhite{light}"
-			style="{eyewhiteStyle}"
-			src="assets/app/eye{randImage}_{side}.png"
-			/>
-			{:else}
-			<img
-			class="eyewhite eyewhite{light}"
-			style="{eyewhiteStyle}"
-			src="assets/app/eyeclosed_{side}.png"
-			/>
-			{/if}
-		</div>
-		<img
-		class="brow"
-		style="{browStyle}"
-		src="assets/app/brow{randImage2}_{side}.png"
-		/>
-		<img
-		class="hair" 
-		style="top: -8%; height: {100 + (rand*10)}%;"
-		src="assets/app/hair{randImage3}_{side}.png"
-		/>
+	<div class="ear" style="background: {color}; height: {20 + Math.abs(rand)*10}%; width: {10 + Math.abs(rand2)*5}%; top: {45 + Math.abs(rand2)*10}%;"></div>
+	<div class="nose" style="{noseStyle}"></div>
+	<!-- {#if light == "on"} -->
+	<img
+	class="eyewhite eyewhite{light}"
+	style="{eyewhiteStyle}"
+	src="assets/app/eye{randImage}_{side}.png"
+	/>
+	<!-- {:else}
+	<img
+	class="eyewhite eyewhite{light}"
+	style="{eyewhiteStyle}"
+	src="assets/app/eyeclosed_{side}.png"
+	/>
+	{/if} -->
+	<img
+	class="brow"
+	style="{browStyle}"
+	src="assets/app/brow{randImage2}_{side}.png"
+	/>
+	<!-- <img
+	class="hair" 
+	style="top: -8%; height: {100 + (rand*10)}%;"
+	src="assets/app/hair{randImage3}_{side}.png"
+	/> -->
 	<!-- <div class="sort_attribute">{randImage3}</div> -->
 </div>
 
@@ -233,8 +231,8 @@
 	} 
 	.ear {
 		position: absolute;
-		transition: all 500ms cubic-bezier(0.250, 0.250, 0.750, 0.750); /* linear */
-		transition-timing-function: cubic-bezier(0.250, 0.250, 0.750, 0.750); /* linear */
+		transition: background 500ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+		transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000); /* linear */
 	}
 	.lefteye .ear {
 		right: 98%;
@@ -259,66 +257,66 @@
 		top: 0%;
 		position: absolute;
 /* 		transform-origin: 50% 50%; */
-		transition: all 0.8s ease-in-out;
-		opacity:  1;
-	}
-	.lefteye {
-		left: 0%;
-	}
-	.lefteye:after {
-		content: "";
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 60%;
-		height: 200%; /* Ensure it covers the entire element */
+transition: all 0.8s ease-in-out;
+opacity:  1;
+}
+.lefteye {
+	left: 0%;
+}
+.lefteye:after {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 60%;
+	height: 200%; /* Ensure it covers the entire element */
 /* 		background: linear-gradient(to right, rgba(40, 0, 48, 1), rgba(40, 0, 48, 0)); */
-		pointer-events: none; /* Optional: Prevent interactions */
-	}
-	.righteye:after {
-		content: "";
-		position: absolute;
-		right: 0;
-		top: 0;
-		width: 60%;
-		height: 200%; /* Ensure it covers the entire element */
+pointer-events: none; /* Optional: Prevent interactions */
+}
+.righteye:after {
+	content: "";
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 60%;
+	height: 200%; /* Ensure it covers the entire element */
 /* 		background: linear-gradient(to left, rgba(40, 0, 48, 1), rgba(40, 0, 48, 0)); */
-		pointer-events: none; /* Optional: Prevent interactions */
-	}
+pointer-events: none; /* Optional: Prevent interactions */
+}
 
-	.righteye {
-		right: 0%;
-	}
-	.side_wrapper {
-		width:  45%;
-		height: 90%;
-		top: 35%;
-		position: absolute;
-	}
-	.lefteye .side_wrapper {
-		left: 55.5%;
-		border-radius: 50% 0 0% 0;
+.righteye {
+	right: 0%;
+}
+.side_wrapper {
+	width:  45%;
+	height: 90%;
+	top: 35%;
+	position: absolute;
+}
+.lefteye .side_wrapper {
+	left: 55.5%;
+	border-radius: 50% 0 0% 0;
 
-	}
-	.righteye .side_wrapper {
-		right: 55.5%;
-		border-radius: 0 50% 0% 0;
-	}
-	.eyewhite {
-		position: absolute;
-		left:  50%;
-		transition: all 0.1s ease-in-out;
-		transform-origin: 50% 50%;
+}
+.righteye .side_wrapper {
+	right: 55.5%;
+	border-radius: 0 50% 0% 0;
+}
+.eyewhite {
+	position: absolute;
+	left:  50%;
+	transition: all 0.1s ease-in-out;
+	transform-origin: 50% 50%;
 
-	}
-	.brow {
-		position: absolute;
-		width: 50%;
-		height: 8px;
-		left:  50%;
-		margin-top: -6px;
-		transition: all 0.1s ease-in-out;
-		transform-origin: 50% 50%;
-		opacity: 0.6;
-	}
+}
+.brow {
+	position: absolute;
+	width: 50%;
+	height: 8px;
+	left:  50%;
+	margin-top: -6px;
+	transition: all 0.1s ease-in-out;
+	transform-origin: 50% 50%;
+	opacity: 0.6;
+}
 </style>

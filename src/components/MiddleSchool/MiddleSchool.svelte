@@ -10,7 +10,9 @@
 	let kid_id = null;
 	let sorted = 1;
 	let excluded = [];
+	let hlmiddle = "";
 	let hl_kid = copy.hl_kid;
+	let displayedValues = {};
 	let transformedData = data.reduce((acc, curr) => {
 	  // Check if the grade level already exists in the accumulator
 		if (!acc[curr.respondent_grade_level]) {
@@ -37,6 +39,26 @@
 			return "high"
 		}
 	}
+
+	function animateValue(grade, newValue) {
+	    const duration = 1000; // Animation duration in ms
+	    const frameRate = 30; // Frames per second
+	    const steps = Math.round((duration / 1000) * frameRate);
+	    const startValue = displayedValues[grade] || 0;
+	    const stepValue = (newValue - startValue) / steps;
+
+	    let currentStep = 0;
+	    const interval = setInterval(() => {
+	    	currentStep++;
+	    	displayedValues[grade] = Math.round(startValue + stepValue * currentStep);
+
+	    	if (currentStep >= steps) {
+	    		clearInterval(interval);
+	        displayedValues[grade] = Math.round(newValue); // Ensure it ends at the exact value
+	    }
+	}, duration / steps);
+	}
+
 	function addOrdinalSuffix(num) {
 		if (typeof num !== "number" || isNaN(num)) {
 			throw new Error("Input must be a valid number");
@@ -75,6 +97,20 @@
 		marginLeft = (copy.story[value]?.start - 4)/3 * -100;
 		kid_id =  Number(copy.story[value]?.kid_id) || null;
 		sorted = Number(copy.story[value]?.sorted) || 1;
+		if (kid_id) {
+			hlmiddle = "hlmiddle"
+		} else {
+			hlmiddle = "no_hlmiddle";
+		}
+		allGrades.forEach((grade) => {
+			if (excluded.indexOf(grade) != -1) {
+				const newValue = 0;
+				animateValue(grade, newValue);
+			} else if (grades.includes(grade) && attribute) {
+				const newValue = Math.round(proportions[grade - 4][attribute]);
+				animateValue(grade, newValue);
+			}
+		});
 	}
 </script>
 <svelte:options runes="{false}" />
@@ -83,32 +119,36 @@
 		<div class="visualContainer">
 			<div class="slidingContainer" style="left: {marginLeft}%;">
 				{#each allGrades as grade, i}
-					{#if grades.indexOf(grade) !== -1}
-						<div 
-						class="gradeContainer {getGradeColor(grade)}" 
-						style="left: {i * 33.3333333333}%;" 
-						transition:fade>
-							<div class="gradeLevel">
-								{#if kid_id == null}
-								<span transition:fade>{addOrdinalSuffix(grade)} grade</span>
-								{/if}
-							</div>
-
-							<EyeContainer 
-								data={transformedData[grade]} 
-								{value} 
-								{attribute} 
-								{sort_attribute}
-								{grade}
-								exclude={excluded.includes(grade)} 
-								{kid_id} 
-								{hl_kid} 
-								{sorted} 
-								proportions={proportions[(grade - 4)]}
-							/>
-						</div>
+				{#if grades.indexOf(grade) !== -1}
+				<div 
+				class="gradeContainer {hlmiddle} {getGradeColor(grade)}" 
+				style="left: {i * 33.3333333333}%;" 
+				transition:fade>
+				<div class="metricLevel">
+					{#if kid_id == null && attribute != "id" && excluded.indexOf(grade) == -1}
+					<span transition:fade>{displayedValues[grade] || 0}%</span>
 					{/if}
-				{/each}
+				</div>
+				<EyeContainer 
+				data={transformedData[grade]} 
+				{value} 
+				{attribute} 
+				{sort_attribute}
+				{grade}
+				exclude={excluded.includes(grade)} 
+				{kid_id} 
+				{hl_kid} 
+				{sorted} 
+				proportions={proportions[(grade - 4)]}
+				/>
+				<div class="gradeLevel">
+					{#if kid_id == null}
+					<span transition:fade>{addOrdinalSuffix(grade)} grade</span>
+					{/if}
+				</div>
+			</div>
+			{/if}
+			{/each}
 		</div>
 
 		{#if intro}
@@ -130,37 +170,34 @@
 </div>
 
 <style>
+	.metricLevel {
+		width:  100%;
+		text-align:  center;
+		font-size:  30px;
+		height:  30px;
+		padding:  0px;
+		color: #b30089;
+		text-transform: uppercase;
+		position: absolute;
+		top:  20px;
+	}
 	.gradeLevel {
 		width:  100%;
 		text-align:  center;
-		color:  white;
-		font-size:  30px;
-		height:  40px;
-		padding:  5px;
-		margin-top: 20px;
+		font-size:  20px;
+		height:  20px;
+		padding:  0px;
 		color: #b30089;
 		font-weight: bold;
 		text-transform: uppercase;
-	}
-	@media screen and (max-width: 860px) {
-		.gradeLevel {
-			font-size:  24px;
-			height:  40px;
-			padding:  8px 0;
-		}
-	}
-	@media screen and (max-width: 600px) {
-		.gradeLevel {
-			font-size:  20px;
-			height:  40px;
-			padding:  10px 0;
-		}
+		position: absolute;
+		bottom:  40px;
 	}
 	@media screen and (max-width: 500px) {
 		.gradeLevel {
 			font-size:  16px;
-			height:  40px;
-			padding:  12px 0;
+			height:  20px;
+			padding:  2px 0;
 		}
 	}
 	.slidingContainer {
@@ -179,17 +216,26 @@
 		position: absolute;
 		top:  0px;
 		height:  100%;
+		border-left: 2px solid rgba(0,0,0,0);
+	}
+	.gradeContainer.grade6.no_hlmiddle {
+		border-left: 2px solid rgba(0,0,0,0.5);
+	}
+	.gradeContainer.grade9.no_hlmiddle {
+		border-left: 2px solid rgba(0,0,0,0.5);
 	}
 	/* .gradeContainer.elementary {
 		background:  var(--color-elementary);
+	} */
+	.gradeContainer.middle.no_hlmiddle {
+		background-color: #b597b8;
+		background-image:  url('assets/app/grain.png');
+		background-size: 100px 100px;
 	}
-	.gradeContainer.middle {
-		background:  var(--color-middle);
-	}
-	.gradeContainer.high {
+	/* .gradeContainer.high {
 		background:  var(--color-high);
-	}
-	.gradeContainer.middle .gradeLevel {
+	} */
+	/* .gradeContainer.middle .gradeLevel {
 		color:  #aaa;
 	} */
 	

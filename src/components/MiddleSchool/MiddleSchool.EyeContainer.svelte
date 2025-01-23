@@ -27,7 +27,7 @@
 	let zoomStyle = ''; // Will hold the dynamic zoom styles
 	// Helper function to calculate positions
 	function calculatePositions() {
-		if (sorted == 1) {
+		if (sorted == 1 && !exclude) {
 			positionDataCopy = [...positionDataCopy].sort((a, b) => {
 				if (a.id < b.id) return -1;
 				if (a.id > b.id) return 1;
@@ -97,29 +97,31 @@
 		});
 
 		// Adjust to match targetOnCount
-		if (targetOnCount > onCount) {
-		    let needed = targetOnCount - onCount;
-		    for (let i = positionDataCopy.length - 1; i >= 0 && needed > 0; i--) {
-		        if (positionLookup[positionDataCopy[i].id].light === "off") {
-		            positionLookup[positionDataCopy[i].id].light = "on";
-		            positionDataCopy[i].light = "on"; // Keep consistent
-		            onCount++;
-		            needed--;
-		        }
-		    }
-		} else if (targetOnCount < onCount) {
-		    let excess = onCount - targetOnCount;
-		    for (let i = 0; i < positionDataCopy.length && excess > 0; i++) {
-		        if (positionLookup[positionDataCopy[i].id].light === "on") {
-		            positionLookup[positionDataCopy[i].id].light = "off";
-		            positionDataCopy[i].light = "off"; // Keep consistent
-		            onCount--;
-		            excess--;
-		        }
-		    }
+		if (!exclude) {
+			if (targetOnCount > onCount) {
+			    let needed = targetOnCount - onCount;
+			    for (let i = positionDataCopy.length - 1; i >= 0 && needed > 0; i--) {
+			        if (positionLookup[positionDataCopy[i].id].light === "off") {
+			            positionLookup[positionDataCopy[i].id].light = "on";
+			            positionDataCopy[i].light = "on"; // Keep consistent
+			            onCount++;
+			            needed--;
+			        }
+			    }
+			} else if (targetOnCount < onCount) {
+			    let excess = onCount - targetOnCount;
+			    for (let i = 0; i < positionDataCopy.length && excess > 0; i++) {
+			        if (positionLookup[positionDataCopy[i].id].light === "on") {
+			            positionLookup[positionDataCopy[i].id].light = "off";
+			            positionDataCopy[i].light = "off"; // Keep consistent
+			            onCount--;
+			            excess--;
+			        }
+			    }
+			}
 		}
-
-		console.log(grade + ": " + targetOnCount + " // " + onCount);
+		
+		// console.log(grade + ": " + targetOnCount + " // " + onCount);
 	}
 
 
@@ -135,70 +137,99 @@
 	});
 
 	function handleResize() {
-		if (containerWidth > 600) {
-			w = containerWidth/6;
-			h = w/2;
-			padding = 10;
-			borderPadding = 15;
-		} else if (containerWidth < 280) {
-			w = containerWidth/3;
-			h = w/2;
-			padding = 3;
-			borderPadding = 5;
-		} else {
-			w = 100;
-			h = 50;
-			padding = 8;
-			borderPadding = 12;
-		}
-		cols = Math.floor((containerWidth - 2 * borderPadding + padding) / (w + padding));
-		rows = Math.floor((containerHeight - 2 * borderPadding + padding) / (h + padding));
-		items = cols * rows;
+	    padding = 5; // Base padding
+	    borderPadding = 15;
+
+	    // Initial width and height calculations
+	    console.log(containerWidth)
+	    if (containerWidth > 600) {
+	        w = containerWidth / 6;
+	        h = w / 2;
+	    } else if (containerWidth < 400) {
+	        w = containerWidth / 4;
+	        h = w / 2;
+	    } else {
+	        w = containerWidth / 5;
+	        h = w / 2;
+	    }
+
+	    // For grade <= 5, increase size while maintaining aspect ratio
+	    let scaleFactor = 1.414; // √2
+	    let boxHeight = h; // Base height
+	    if (grade <= 5) {
+	        w *= scaleFactor;
+	        h *= scaleFactor;
+	        boxHeight = h; // Update box height for scaled boxes
+	    }
+
+	    // Calculate rows and ensure padding consistency
+	    cols = Math.floor((containerWidth - 2 * borderPadding + padding) / (w + padding));
+	    rows = Math.floor((containerHeight - 2 * borderPadding + padding) / (boxHeight + padding));
+
+	    // Ensure total height fits within the container
+	    let totalHeight = rows * boxHeight + (rows - 1) * padding;
+	    if (totalHeight > containerHeight - 2 * borderPadding) {
+	        rows -= 1; // Reduce rows if they exceed the container height
+	        totalHeight = rows * boxHeight + (rows - 1) * padding;
+	    }
+
+	    // Adjust padding slightly to ensure alignment
+	    let remainingSpace = containerHeight - totalHeight - 2 * borderPadding;
+	    if (remainingSpace > 0) {
+	        padding += remainingSpace / (rows - 1); // Distribute extra space evenly
+	    }
+
+	    // Recalculate items
+	    items = cols * rows;
 
 	    const hl_index = 511; // Highlighted item ID
 	    const hl_item = data.find(item => item.id == hl_index);
 
 	    // Use the data directly without shuffling
 	    if (hl_item) {
-	        // Ensure hl_item is always included in positionDataCopy
-	    	positionDataCopy = data.slice(0, items);
+	        positionDataCopy = data.slice(0, items);
 
-	        // If hl_item is not in the selected data, replace the last item
-	    	if (!positionDataCopy.some(item => item.id == hl_index)) {
-	    		positionDataCopy[positionDataCopy.length - 1] = hl_item;
-	    	}
+	        // Ensure hl_item is always included in positionDataCopy
+	        if (!positionDataCopy.some(item => item.id == hl_index)) {
+	            positionDataCopy[positionDataCopy.length - 1] = hl_item;
+	        }
 	    } else {
 	        // Fallback: Use the data as-is without ensuring hl_item is included
-	    	positionDataCopy = data.slice(0, items);
+	        positionDataCopy = data.slice(0, items);
 	    }
 
 	    calculatePositions();
 	}
 
+
 	function checkZoom() {
-		const transZoom = "transition: all 2s ease-in-out";
-		if (kid_id) {
-			const target = positionLookup[positionDataCopy[0]?.id];
-			let scale = 2;
-			if (containerWidth < 200) {
-				scale = 3;
-			} else if (containerWidth < 666) {
-				scale = 2;
-			} else {
-				scale = 1.5;
-			}
-			if (target) {
-				zoomStyle = `margin-top: -${containerHeight/10 + target.h}px; transform: scale(${scale}) translate(${(containerWidth / 2 - (target.x + target.w / 2))}px, ${(containerHeight / 2 - (target.y + target.h))}px);`;
-				if (loaded) {
-					zoomStyle = zoomStyle + " " + transZoom;
-				}
-			}
-		} else {
-			if (loaded) {
-				zoomStyle = transZoom;
-			}
-        	// zoomStyle = ''; // Reset zoom
-		}
+	    const transZoom = "transition: all 2s ease-in-out";
+
+	    if (kid_id) {
+	        const target = positionLookup[positionDataCopy[0]?.id];
+	        let scale = 2;
+
+	        if (containerWidth < 200) {
+	            scale = 3;
+	        } else if (containerWidth < 666) {
+	            scale = 2;
+	        } else {
+	            scale = 1.5;
+	        }
+
+	        if (target) {
+	            // Adjust zoomStyle based on recalculated dimensions
+	            zoomStyle = `margin-top: -${containerHeight / 10}px; transform: scale(${scale}) translate3d(${(containerWidth / 2 - (target.x + target.w / 2))}px, ${(containerHeight / 2 - (target.y + target.h))}px, 0);`;
+	            if (loaded) {
+	                zoomStyle = zoomStyle + " " + transZoom;
+	            }
+	        }
+	    } else {
+	        if (loaded) {
+	            zoomStyle = transZoom;
+	        }
+	        // Reset zoomStyle if necessary
+	    }
 	}
 
 
@@ -217,21 +248,25 @@
 <svelte:options runes="{false}" />
 <svelte:window on:resize={handleResize} />
 <div bind:clientWidth={containerWidth} bind:clientHeight={containerHeight} class="eyes" style={zoomStyle}>
-	{#each data as d}
-	{#if d.id in positionLookup}
-	<!-- {#if kid_id == null || kid_id === d.id} -->
-	<div transition:fade>
-		<Kid {d} {positionLookup} {sort_attribute} {attribute} {kid_id} {exclude} grade={d.respondent_grade_level} />
-	</div>
-	<!-- {/if} -->
-	{/if}
-	{/each}
+	{#key w}
+		{#each data as d}
+			{#if d.id in positionLookup}
+			<!-- {#if kid_id == null || kid_id === d.id} -->
+			<div transition:fade>
+				<Kid {d} {positionLookup} {sort_attribute} {attribute} {kid_id} {exclude} grade={d.respondent_grade_level} />
+			</div>
+			<!-- {/if} -->
+			{/if}
+		{/each}
+	{/key}
 </div>
 
 <style>
 	.eyes {
+		top:  50px;
 		width: 100%;
-		height: calc(100vh - 60px);
+		height: calc(100vh - 100px);
 		position: relative;
+/* 		box-sizing: content-box; */
 	}
 </style>
