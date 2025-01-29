@@ -11,7 +11,7 @@
 	let sorted = 1;
 	let excluded = [];
 	let hlmiddle = "";
-	let hl_kid = copy.hl_kid;
+	let hl_kid = copy.hl_kid.split(",").map(Number)
 	let displayedValues = {};
 	let transformedData = data.reduce((acc, curr) => {
 	  // Check if the grade level already exists in the accumulator
@@ -83,6 +83,10 @@
 		}
 	}
 	let intro = true;
+	let quote = ""
+	let quote_id = null;
+	let hl = 0;
+	let customSpeed = 200;
 	$: {
 		if (typeof value != "number") {
 			intro = true;
@@ -96,7 +100,11 @@
 		grades = copy.story[value]?.grades.split(",").map(Number);
 		marginLeft = (copy.story[value]?.start - 4)/3 * -100;
 		kid_id =  Number(copy.story[value]?.kid_id) || null;
+		quote_id = Number(copy.story[value]?.quote_id) || null;
+		quote = quote_id ? copy.story[value].text : null;
+		hl = copy.story[value].hl ? 1 : 0;
 		sorted = Number(copy.story[value]?.sorted) || 1;
+		customSpeed = Number(copy.story[value]?.speed) || null;
 		if (kid_id) {
 			hlmiddle = "hlmiddle"
 		} else {
@@ -138,12 +146,16 @@
 				exclude={excluded.includes(grade)} 
 				{kid_id} 
 				{hl_kid} 
-				{sorted} 
+				{sorted}
+				{quote}
+				{quote_id}
+				{customSpeed}
+				{hl}
 				proportions={proportions[(grade - 4)]}
 				/>
 				<div class="gradeLevel">
 					{#if kid_id == null}
-					<span transition:fade>{addOrdinalSuffix(grade)} grade</span>
+						<span transition:fade>{addOrdinalSuffix(grade)} grade</span>
 					{/if}
 				</div>
 			</div>
@@ -161,9 +173,15 @@
 	<Scrolly bind:value top={0}>
 		{#each copy.story as step_obj, i}
 		{@const active = value === i}
-		<div class="step {step_obj.addclass ? step_obj.addclass : ''}" class:active>
-			<Text copy={step_obj.text} type={step_obj.type} />
-		</div>
+			{#if step_obj.quote_id}
+				<div class="step quoteStep" class:active>
+					
+				</div>
+			{:else}
+			<div class="step {step_obj.addclass ? step_obj.addclass : 'smallText'}" class:active>
+				<Text copy={step_obj.text} type={step_obj.type} />
+			</div>
+			{/if}
 		{/each}
 	</Scrolly>
 </section>
@@ -176,10 +194,15 @@
 		font-size:  30px;
 		height:  30px;
 		padding:  0px;
-		color: #b30089;
+/* 		color: #b30089; */
+		color: black;
 		text-transform: uppercase;
 		position: absolute;
 		top:  20px;
+	}
+	.metricLevel span {
+		background: #ffd375;
+		padding: 0px 5px;
 	}
 	.gradeLevel {
 		width:  100%;

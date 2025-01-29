@@ -2,11 +2,12 @@
 	import { fade } from 'svelte/transition';
 	import { onMount } from "svelte";
 	import Kid from "$components/MiddleSchool/MiddleSchool.Kid.svelte";
+	import Text from "$components/MiddleSchool/MiddleSchool.Text.svelte";
 
+	
 
-	const hl_index = 511; // Highlighted item ID
+	export let data, kid_id, hl_kid, sorted, value, attribute, exclude, sort_attribute, proportions, grade, quote, quote_id, hl, customSpeed;
 
-	export let data, kid_id, hl_kid, sorted, value, attribute, exclude, sort_attribute, proportions, grade;
 	let oldvalue = -1;
 	let loaded = false;
 	let positionDataCopy = [];
@@ -23,6 +24,7 @@
 
 	let containerWidth = 0;
 	let containerHeight = 0;
+	let zoomed = "";
 
 	let zoomStyle = ''; // Will hold the dynamic zoom styles
 	// Helper function to calculate positions
@@ -48,10 +50,12 @@
 
 		// move hl_kid to beginning
 		if (attribute == "id") {
-			const index = positionDataCopy.findIndex(obj => obj.id == kid_id);
-			if (index !== -1) {
-				const [item] = positionDataCopy.splice(index, 1);
-				positionDataCopy.unshift(item);
+			for (let i = 0; i < hl_kid.length; i++) {
+				const index = positionDataCopy.findIndex(obj => obj.id == hl_kid[i]);
+				if (index !== -1) {
+					const [item] = positionDataCopy.splice(index, 1);
+					positionDataCopy.unshift(item);
+				}
 			}
 		}
 
@@ -69,15 +73,19 @@
 			const x = startX + col * (w + padding);
 			const y = borderPadding + row * (h + padding);
 			const v = d[attribute];
+			const z = quote_id == d.id ? 99 : 1;
 
 			let light = "off"
-			if (exclude) {
-				light = "on";
-			}
 			if (v >= 4) {
 				light = "on";
 			}
 			if (kid_id == d.id) {
+				light = "on";
+			}
+			if (attribute == "id" || exclude) {
+				light = ""
+			}
+			if (hl == 1) {
 				light = "on";
 			}
 			if (light == "on") {
@@ -89,30 +97,33 @@
 			} else {
 				opacity = 1;
 			}
-			let speed = 1000 + 2000 * Math.random();
-			if (d.id == hl_kid) {
+			let speed = 1000 + Math.round(2000 * Math.random());
+			if (hl_kid.indexOf(d.id) != -1) {
 				speed = 1900;
 			}
-			positionLookup[d.id] = { x, y, w, h, v, speed, opacity, light };	
+			if (customSpeed < 0) {
+				speed = customSpeed;
+			}
+			positionLookup[d.id] = { x, y, w, h, v, z, speed, opacity, light };	
 		});
 
 		// Adjust to match targetOnCount
 		if (!exclude) {
 			if (targetOnCount > onCount) {
-			    let needed = targetOnCount - onCount;
-			    for (let i = positionDataCopy.length - 1; i >= 0 && needed > 0; i--) {
-			        if (positionLookup[positionDataCopy[i].id].light === "off") {
-			            positionLookup[positionDataCopy[i].id].light = "on";
+				let needed = targetOnCount - onCount;
+				for (let i = positionDataCopy.length - 1; i >= 0 && needed > 0; i--) {
+					if (positionLookup[positionDataCopy[i].id].light === "off") {
+						positionLookup[positionDataCopy[i].id].light = "on";
 			            positionDataCopy[i].light = "on"; // Keep consistent
 			            onCount++;
 			            needed--;
 			        }
 			    }
 			} else if (targetOnCount < onCount) {
-			    let excess = onCount - targetOnCount;
-			    for (let i = 0; i < positionDataCopy.length && excess > 0; i++) {
-			        if (positionLookup[positionDataCopy[i].id].light === "on") {
-			            positionLookup[positionDataCopy[i].id].light = "off";
+				let excess = onCount - targetOnCount;
+				for (let i = 0; i < positionDataCopy.length && excess > 0; i++) {
+					if (positionLookup[positionDataCopy[i].id].light === "on") {
+						positionLookup[positionDataCopy[i].id].light = "off";
 			            positionDataCopy[i].light = "off"; // Keep consistent
 			            onCount--;
 			            excess--;
@@ -141,24 +152,23 @@
 	    borderPadding = 15;
 
 	    // Initial width and height calculations
-	    console.log(containerWidth)
 	    if (containerWidth > 600) {
-	        w = containerWidth / 6;
-	        h = w / 2;
+	    	w = containerWidth / 6;
+	    	h = w / 2;
 	    } else if (containerWidth < 400) {
-	        w = containerWidth / 4;
-	        h = w / 2;
+	    	w = containerWidth / 4;
+	    	h = w / 2;
 	    } else {
-	        w = containerWidth / 5;
-	        h = w / 2;
+	    	w = containerWidth / 5;
+	    	h = w / 2;
 	    }
 
 	    // For grade <= 5, increase size while maintaining aspect ratio
 	    let scaleFactor = 1.414; // √2
 	    let boxHeight = h; // Base height
 	    if (grade <= 5) {
-	        w *= scaleFactor;
-	        h *= scaleFactor;
+	    	w *= scaleFactor;
+	    	h *= scaleFactor;
 	        boxHeight = h; // Update box height for scaled boxes
 	    }
 
@@ -182,54 +192,55 @@
 	    // Recalculate items
 	    items = cols * rows;
 
-	    const hl_index = 511; // Highlighted item ID
-	    const hl_item = data.find(item => item.id == hl_index);
+	    const hl_item = data.find(item => item.id == hl_kid);
 
 	    // Use the data directly without shuffling
 	    if (hl_item) {
-	        positionDataCopy = data.slice(0, items);
+	    	positionDataCopy = data.slice(0, items);
 
 	        // Ensure hl_item is always included in positionDataCopy
-	        if (!positionDataCopy.some(item => item.id == hl_index)) {
-	            positionDataCopy[positionDataCopy.length - 1] = hl_item;
-	        }
+	    	if (!positionDataCopy.some(item => item.id == hl_kid)) {
+	    		positionDataCopy[positionDataCopy.length - 1] = hl_item;
+	    	}
 	    } else {
 	        // Fallback: Use the data as-is without ensuring hl_item is included
-	        positionDataCopy = data.slice(0, items);
+	    	positionDataCopy = data.slice(0, items);
 	    }
 
 	    calculatePositions();
 	}
 
-
+	let scale = 2;
 	function checkZoom() {
-	    const transZoom = "transition: all 2s ease-in-out";
+		const transZoom = "transition: all 2s ease-in-out";
 
-	    if (kid_id) {
-	        const target = positionLookup[positionDataCopy[0]?.id];
-	        let scale = 2;
+		if (kid_id) {
+			const target = positionLookup[positionDataCopy[0]?.id];
+			zoomed = "zoomed";
 
-	        if (containerWidth < 200) {
-	            scale = 3;
-	        } else if (containerWidth < 666) {
-	            scale = 2;
-	        } else {
-	            scale = 1.5;
-	        }
 
-	        if (target) {
+			if (containerWidth < 200) {
+				scale = 3;
+			} else if (containerWidth < 666) {
+				scale = 2;
+			} else {
+				scale = 1.5;
+			}
+
+			if (target) {
 	            // Adjust zoomStyle based on recalculated dimensions
-	            zoomStyle = `margin-top: -${containerHeight / 10}px; transform: scale(${scale}) translate3d(${(containerWidth / 2 - (target.x + target.w / 2))}px, ${(containerHeight / 2 - (target.y + target.h))}px, 0);`;
-	            if (loaded) {
-	                zoomStyle = zoomStyle + " " + transZoom;
-	            }
-	        }
-	    } else {
-	        if (loaded) {
-	            zoomStyle = transZoom;
-	        }
+				zoomStyle = `margin-top: -${containerHeight / 10}px; transform: scale(${scale}) translate3d(${(containerWidth / 2 - (target.x + target.w / 2))}px, ${(containerHeight / 2 - (target.y + target.h))}px, 0);`;
+				if (loaded) {
+					zoomStyle = zoomStyle + " " + transZoom;
+				}
+			}
+		} else {
+			if (loaded) {
+				zoomStyle = transZoom;
+			}
+			zoomed = "";
 	        // Reset zoomStyle if necessary
-	    }
+		}
 	}
 
 
@@ -247,17 +258,21 @@
 
 <svelte:options runes="{false}" />
 <svelte:window on:resize={handleResize} />
-<div bind:clientWidth={containerWidth} bind:clientHeight={containerHeight} class="eyes" style={zoomStyle}>
+<div bind:clientWidth={containerWidth} bind:clientHeight={containerHeight} class="eyes {zoomed}" style={zoomStyle}>
 	{#key w}
-		{#each data as d}
-			{#if d.id in positionLookup}
-			<!-- {#if kid_id == null || kid_id === d.id} -->
-			<div transition:fade>
-				<Kid {d} {positionLookup} {sort_attribute} {attribute} {kid_id} {exclude} grade={d.respondent_grade_level} />
-			</div>
-			<!-- {/if} -->
-			{/if}
-		{/each}
+	{#each data as d}
+	{#if d.id in positionLookup}
+	<div style="transform: translateZ(0);" transition:fade>
+		<Kid {d} quote={null} {positionLookup} {sort_attribute} {attribute} {kid_id} {exclude} grade={d.respondent_grade_level} />
+	</div>
+	{/if}
+	{/each}
+	{#if quote}
+	<div class="quote" style="
+	left: {positionLookup[quote_id].x - positionLookup[quote_id].w / 10.5}px;
+	top: {positionLookup[quote_id].y + positionLookup[quote_id].h + 20}px;
+	" transition:fade><Text copy={quote} /></div>
+	{/if}
 	{/key}
 </div>
 
@@ -268,5 +283,5 @@
 		height: calc(100vh - 100px);
 		position: relative;
 /* 		box-sizing: content-box; */
-	}
+}
 </style>

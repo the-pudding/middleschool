@@ -2,7 +2,7 @@
 	import { onMount } from "svelte";
 	import Eye from "$components/MiddleSchool/MiddleSchool.Eye.svelte";
 	import Face from "$components/MiddleSchool/MiddleSchool.Eye.svelte";
-	export let d, attribute, positionLookup, kid_id, exclude, grade, sort_attribute;
+	export let d, attribute, positionLookup, kid_id, exclude, grade, sort_attribute, quote;
 	let rand = seededRandom(d.id + 8);
 	let rand2 = seededRandom(d.id + 2);
 	let rand3 = seededRandom(d.id + 1);
@@ -116,10 +116,11 @@
 <div class="eye {positionLookup[d.id].light}" style="
 left: {positionLookup[d.id].x}px;
 top: {positionLookup[d.id].y}px;
+z-index: {positionLookup[d.id].z};
 width: {positionLookup[d.id].w}px;
 height: {positionLookup[d.id].h}px;
 opacity: {positionLookup[d.id].opacity};
-transition: opacity 500ms linear, background 500ms linear, left {positionLookup[d.id].speed + 300*rand2}ms cubic-bezier(0.420, 0.000, 0.580, 1.000), top {positionLookup[d.id].speed + 300*rand}ms cubic-bezier(0.420, 0.000, 0.580, 1.000); 
+transition: transform 500ms linear, opacity 500ms linear, background 500ms linear, left {positionLookup[d.id].speed + 300*rand2}ms cubic-bezier(0.420, 0.000, 0.580, 1.000), top {positionLookup[d.id].speed + 300*rand}ms cubic-bezier(0.420, 0.000, 0.580, 1.000); 
 ">
 <div class="face" style="background: {color}; transform: translate({tx}%,{ty}%); width: {64 + rand*5}%; left: { (100 - (64 + rand*5))/2 }%;">
 	<Eye side="left" {color} {rand} {rand2} {rand3} light={positionLookup[d.id].light} {grade}/>
@@ -130,7 +131,6 @@ transition: opacity 500ms linear, background 500ms linear, left {positionLookup[
 <!-- <div class="sort_attribute">{Math.round(d[sort_attribute])}</div> -->
 <!-- <div class="sort_attribute">{d.id}</div> -->
 </div>
-
 
 <style>
 	.face {
@@ -162,6 +162,9 @@ transition: opacity 500ms linear, background 500ms linear, left {positionLookup[
 		transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000); 
 		transform: translate3d(0,0,0);
 	}
+	.eye.on {
+		background: #ffd375;
+	}
 	.eye.off {
 		background: #450040;
 	}
@@ -181,4 +184,5 @@ transition: opacity 500ms linear, background 500ms linear, left {positionLookup[
 		width: 140%;
 		max-width: none;
 	}
+	
 </style>
