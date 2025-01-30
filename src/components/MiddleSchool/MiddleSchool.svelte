@@ -211,6 +211,9 @@
 		<div class="hedContainer" transition:fade>
 			<h1>{copy.hed}</h1>
 			<h3>by <a href="https://pudding.cool/author/alvin-chang/">alvin chang</a></h3>
+			<div class="scrolldown">
+				↓
+			</div>
 		</div>
 		{/if}
 	</div>
