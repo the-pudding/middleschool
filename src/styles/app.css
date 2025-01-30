@@ -100,14 +100,14 @@ html {
 	width: 100%;
 	height: 100vh;
 	overflow: hidden;
-	background-image:  url('assets/app/grain.png');
+/* 	background-image:  url('assets/app/grain.png'); */
 }
 .visualContainer .hedContainer {
 	position: absolute;
 	width:  100%;
 	text-align:  center;
 	bottom: 75%;
-	color:  var(--color-dark);
+	color:  var(--color-light);
 }
 .hedContainer h1 {
 	font-size:  20px;
@@ -125,6 +125,7 @@ html {
 	pointer-events: none;
 	height: auto;
 	font-size: 17px;
+	line-height: 22px;
 	min-height: 0vh;
 	position: relative;
 	padding: 30vh 0 100vh;
@@ -147,15 +148,36 @@ html {
 	background: linear-gradient(
 		to bottom,
 		transparent 0%, /* Start with the background color */
-		var(--color-light) 15%, /* Fade to transparent at the top */
-		var(--color-light) 85%, /* Background color in the middle */
+		var(--bgcolor) 15%, /* Fade to transparent at the top */
+		var(--bgcolor) 85%, /* Background color in the middle */
 		transparent 100% /* Fade to transparent at the bottom */
 	);
 	min-height: 100vh;
 	height: 100%;
 	margin: 30vh 0;
-/* 	padding:  50vh 0; */
-position: relative;
+	/* 	padding:  50vh 0; */
+	position: relative;
+}
+.bigText.step .textContainer {
+	left:  50%;
+	top:  50%;
+	position: absolute;
+	transform: translate(-50%, -50%);
+	background:  none;
+	color: var(--color-light);
+	border:  none;
+	padding: 0 30px;
+	max-width: 600px;
+	width: 100%;
+	box-shadow: none;
+	line-height: 1.5rem;
+}
+.bigText.step .textContainer p a {
+	color:  var(--color-hl);
+	border-bottom:  1px dashed var(--color-hl);
+}
+.bigText.step .textContainer p a:hover {
+	border-bottom:  1px solid var(--color-dark);
 }
 
 .smallText.step .textContainer {
@@ -166,11 +188,14 @@ position: relative;
 	width: 90%;
 	left: 20px;
 	padding: 1.2rem;
-	line-height: 1.6em;
+/* 	line-height: 1.6em; */
 	box-shadow: 0px 0px 10px -6px #000;
 	pointer-events: all;
 	border-radius: 10px;
 	position: relative;
+}
+.smallText.step {
+	padding:  50vh 0 90vh;
 }
 .smallText.step .textContainer::after {
 	content: '';
@@ -184,11 +209,13 @@ position: relative;
 	border-color: transparent transparent #fff transparent;
 	transform: rotate(270deg);
 }
-
+.quoteStep.step {
+	padding: 30vh 0 40vh;
+}
 .quote {
 	position: absolute;
-	font-size: 15px;
-	line-height:  18px;
+	font-size: 17px;
+	line-height:  22px;
 /* 	color:  #fed4ff; */
 /* 	background:  var(--color-dark); */
 	color:  black;
@@ -196,57 +223,64 @@ position: relative;
 	box-shadow: 0px 0px 20px 0px #000;
 	pointer-events: all;
 	border-radius: 10px;
-	padding: 10px;
-	transition: all 500ms cubic-bezier(0.420, 0.000, 0.580, 1.000); /* ease-in-out */
-	transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000); /* ease-in-out */
-	max-width: 200px;
+	padding: 1.2rem;
+/* 	min-width: 120px; */
+	max-width: 400px;
+/* 	width: 250px; */
 	transform-origin: top left;
+	z-index:  999;
+}
+
+@media screen and (max-width: 860px) {
+	.quote {
+		font-size: 16px;
+		line-height:  20px;
+	}
+}
+@media screen and (max-width: 600px) {
+	.quote {
+		font-size: 15px;
+		line-height:  19px;
+	}
 }
 .quote::after {
 	content: '';
 	position: absolute;
 	bottom: 99%; /* Position below the container */
-	left: 50%; /* Adjust to position the tail */
+	left: 15px; /* Adjust to position the tail */
 	width: 0px;
 	height: 0px;
 	border-style: solid;
-	border-width: 20px 20px 20px 20px;
+	border-width: 10px 20px 10px 20px;
 	/* 	border-color: transparent transparent #fed4ff transparent; */
 /* 	border-color: transparent transparent transparent #fed4ff; */
 	border-color: transparent transparent transparent white;
 	transform: rotate(270deg);
 }
-.zoomed .quote {
+.quote.right::after {
+	left:  auto;
+	right: 20px;
+}
+.zoomed3 .quote {
+	transform: scale(0.33333);
+}
+.zoomed2 .quote {
 	transform: scale(0.5);
 }
-
-.bigText.step .textContainer {
-	left:  50%;
-	top:  50%;
-	position: absolute;
-	transform: translate(-50%, -50%);
-	background:  none;
-	color: var(--color-dark);
-	border:  none;
-	padding: 0 30px;
-	max-width: 600px;
-	width: 100%;
-	box-shadow: none;
+.zoomed15 .quote {
+	transform: scale(0.6666);
 }
-.step p a {
-	color:  var(--color-hl);
-	border-bottom:  1px dashed var(--color-hl);
+.zoomed .quote {
+	transform: scale(1);
+}
+.step p a, .quote p a {
+	color:  var(--color-dark-hl);
+	border-bottom:  1px dashed var(--color-dark-hl);
 	text-decoration: none;
 }
-.bigText.step .textContainer p a {
-	color:  var(--color-dark);
-	border-bottom:  1px dashed var(--color-dark);
-}
-.bigText.step .textContainer p a:hover {
-	border-bottom:  1px solid var(--color-dark);
-}
-.step .textContainer p label {
-	background: #fff; /* Highlight color */
+
+.step .textContainer p label, .quote p label {
+	background: #ffd375; /* Highlight color */
 	padding: 0 2px; /* Add consistent horizontal padding */
 	border-radius: 2px; /* Optional for rounded corners */
 	box-decoration-break: clone; /* Ensures padding and background on line breaks */
@@ -264,8 +298,10 @@ position: relative;
 	margin-bottom:  0px;
 }
 .step .textContainer .citation {
-	font-size: 14px;
-	opacity: 0.8;
+	font-size: 13px;
+	opacity: 0.6;
+	line-height: 17px;
+	color: black;
 }
 /* @media screen and (max-width: 600px) {
 	.step {

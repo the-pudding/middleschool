@@ -2,11 +2,8 @@
 	import { fade } from 'svelte/transition';
 	import { onMount } from "svelte";
 	import Kid from "$components/MiddleSchool/MiddleSchool.Kid.svelte";
-	import Text from "$components/MiddleSchool/MiddleSchool.Text.svelte";
 
-	
-
-	export let data, kid_id, hl_kid, sorted, value, attribute, exclude, sort_attribute, proportions, grade, quote, quote_id, hl, customSpeed;
+	export let data, kid_id, hl_kid, sorted, value, attribute, exclude, sort_attribute, proportions, grade, quote, quote_id, hl, customSpeed, grades;
 
 	let oldvalue = -1;
 	let loaded = false;
@@ -70,8 +67,8 @@
 		positionDataCopy.forEach((d, index) => {
 			const row = Math.floor(index / cols);
 			const col = index % cols;
-			const x = startX + col * (w + padding);
-			const y = borderPadding + row * (h + padding);
+			const x = Math.round(startX + col * (w + padding));
+			const y = Math.round(borderPadding + row * (h + padding));
 			const v = d[attribute];
 			const z = quote_id == d.id ? 99 : 1;
 
@@ -83,7 +80,7 @@
 				light = "on";
 			}
 			if (attribute == "id" || exclude) {
-				light = ""
+				light = "neutral";
 			}
 			if (hl == 1) {
 				light = "on";
@@ -97,7 +94,7 @@
 			} else {
 				opacity = 1;
 			}
-			let speed = 1000 + Math.round(2000 * Math.random());
+			let speed = 1000 + 2000 * Math.random();
 			if (hl_kid.indexOf(d.id) != -1) {
 				speed = 1900;
 			}
@@ -131,7 +128,6 @@
 			    }
 			}
 		}
-		
 		// console.log(grade + ": " + targetOnCount + " // " + onCount);
 	}
 
@@ -166,11 +162,11 @@
 	    // For grade <= 5, increase size while maintaining aspect ratio
 	    let scaleFactor = 1.414; // √2
 	    let boxHeight = h; // Base height
-	    if (grade <= 5) {
+	    // if (grade <= 5) {
 	    	w *= scaleFactor;
 	    	h *= scaleFactor;
 	        boxHeight = h; // Update box height for scaled boxes
-	    }
+	    // }
 
 	    // Calculate rows and ensure padding consistency
 	    cols = Math.floor((containerWidth - 2 * borderPadding + padding) / (w + padding));
@@ -226,7 +222,7 @@
 			} else {
 				scale = 1.5;
 			}
-
+			zoomed = "zoomed" + String(scale).replace(".","");
 			if (target) {
 	            // Adjust zoomStyle based on recalculated dimensions
 				zoomStyle = `margin-top: -${containerHeight / 10}px; transform: scale(${scale}) translate3d(${(containerWidth / 2 - (target.x + target.w / 2))}px, ${(containerHeight / 2 - (target.y + target.h))}px, 0);`;
@@ -262,25 +258,19 @@
 	{#key w}
 	{#each data as d}
 	{#if d.id in positionLookup}
-	<div style="transform: translateZ(0);" transition:fade>
-		<Kid {d} quote={null} {positionLookup} {sort_attribute} {attribute} {kid_id} {exclude} grade={d.respondent_grade_level} />
-	</div>
+	<!-- <div style="transform: translateZ(0);" transition:fade> -->
+		<Kid {d} {quote} {value} {quote_id} positionLookup={positionLookup[d.id]} {sort_attribute} {attribute} {kid_id} {exclude} grade={d.respondent_grade_level} {grades}/>
+	<!-- </div> -->
 	{/if}
 	{/each}
-	{#if quote}
-	<div class="quote" style="
-	left: {positionLookup[quote_id].x - positionLookup[quote_id].w / 10.5}px;
-	top: {positionLookup[quote_id].y + positionLookup[quote_id].h + 20}px;
-	" transition:fade><Text copy={quote} /></div>
-	{/if}
 	{/key}
 </div>
 
 <style>
 	.eyes {
-		top:  50px;
+		top:  80px;
 		width: 100%;
-		height: calc(100vh - 100px);
+		height: calc(100vh - 130px);
 		position: relative;
 /* 		box-sizing: content-box; */
 }

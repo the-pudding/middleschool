@@ -28,13 +28,14 @@
   --color-blue: #4717f6;
   --color-green: #34a29e;
   --color-red: #ff533d;
-  --color-yellow: #e5e338;
-/*   --color-hl: #edb42d;
-  --bgcolor: #1a1919; */
-  --color-hl: #820096;
+  --color-yellow: #ffd375;
+/*   --color-hl: #edb42d;*/
+  --bgcolor: #1f0c1d; 
+/*   --bgcolor: #c7abc9; */
+  --color-hl: #f86eff;
   --color-light: #e1c8e3;
   --color-dark: #210021;
-  --bgcolor: #c7abc9;
+  --color-dark-hl: #a10091;
   --color-elementary: #1e0024;
   --color-middle: #1e0024;
 /*   --color-middle: #0d060d; */

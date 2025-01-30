@@ -8,20 +8,20 @@
 	const randImage = Math.floor(Math.abs(rand) * imageNumbers);
 	const randImage2 = Math.floor(Math.abs(rand2) * imageNumbers);
 	const randImage3 = Math.floor(Math.abs(rand3) * imageNumbers);
-
+	let smiling = "";
 	// Configuration for dimensions and timing
 	const config = {
 		baseHeight: 1.5 + Math.round(Math.abs(rand) * 1.5) + ageAdjustEye(grade, "height"),
 		baseWidth: 25 + Math.round(Math.abs(rand) * 5) + ageAdjustEye(grade, "width"),
-		baseHeightBrow: 10 + Math.round(Math.abs(rand) * 5) + ageAdjustBrow(grade, "height"),
+		baseHeightBrow: 2 + Math.round(Math.abs(rand) * 2) + ageAdjustBrow(grade, "height"),
 		baseWidthBrow: 45 + Math.round(Math.abs(rand) * 5) + ageAdjustBrow(grade, "width"),
 		baseTop: 60 + Math.round(Math.abs(rand) * 3),
 		baseTopBrow: 55 + Math.round(Math.abs(rand) * 2),
-		baseTranslateX: side === "right" ? 20 - Math.round(rand * 50) : 20 + Math.round(rand * 50),
-		baseTranslateXNose: side === "right" ? -Math.round(rand * 10) - 40 : Math.round(rand * 10) - 40,
-		baseRotate: side === "right" ? -Math.round(rand * 5) : Math.round(rand * 5),
-		baseRotateBrow: side === "right" ? -Math.round(rand2 * 5) : Math.round(rand2 * 5),
-		baseRotateNose: side === "right" ? -Math.round(Math.abs(rand2) * 3) : Math.round(Math.abs(rand2) * 3),
+		baseTranslateX: 20 - Math.round(rand * 50),
+		baseTranslateXNose: Math.round(rand * 10) - 40,
+		baseRotate: Math.round(rand * 3),
+		baseRotateBrow: Math.round(rand2 * 5),
+		baseRotateNose: Math.round(Math.abs(rand2) * 3),
 		blinkDuration: 100,
 		minBlinkInterval: 2000,
 		maxBlinkIntervalMultiplier: 8,
@@ -34,8 +34,8 @@
 		return (g - 4)*2;
 	}
 
-	let eyewhiteStyle, browStyle, noseStyle; // Styles for the eye and brow
-	let baseEyewhiteStyle, baseBrowStyle, baseNoseStyle; // Base styles
+	let eyewhiteStyle, browStyle, smilebrowStyle, noseStyle, smilewhiteStyle; // Styles for the eye and brow
+	let baseEyewhiteStyle, baseSmileEyewhiteStyle, baseBrowStyle, baseSmileBrowStyle, baseNoseStyle; // Base styles
 	let blinkInterval;
 
 	// Initialize base styles
@@ -47,12 +47,27 @@
 			config.baseTranslateX,
 			config.baseRotate
 			);
+		baseSmileEyewhiteStyle = generateStyle(
+			config.baseWidth*1,
+			config.baseHeight*0.8,
+			config.baseTop,
+			config.baseTranslateX,
+			config.baseRotate*2
+			);
 		baseBrowStyle = generateStyle(
 			config.baseWidthBrow,
 			config.baseHeightBrow,
 			config.baseTopBrow,
 			config.baseTranslateX,
 			config.baseRotateBrow,
+			true
+			);
+		baseSmileBrowStyle = generateStyle(
+			config.baseWidthBrow,
+			config.baseHeightBrow,
+			config.baseTopBrow - 5,
+			config.baseTranslateX,
+			config.baseRotateBrow - 10,
 			true
 			);
 		baseNoseStyle = generateStyle(
@@ -65,7 +80,9 @@
 			true
 			);
 		eyewhiteStyle = baseEyewhiteStyle;
+		smilewhiteStyle = baseSmileEyewhiteStyle;
 		browStyle = baseBrowStyle;
+		smilebrowStyle = baseSmileBrowStyle;
 		noseStyle = baseNoseStyle;
 	}
 
@@ -73,11 +90,12 @@
 	// Generate styles for the eye, brow, and nose
 	function generateStyle(width, height, top, translateX, rotate, isBrow = false, isNose = false) {
 		const adj = side === "right" ? -10 + rand*4 : 10 - rand*4;
+		rotate = side === "right" ? rotate * -1 : rotate;
 		if (isBrow) {
 			return `width: ${width}%; height: ${height}%; margin-left: ${adj}%; top: ${top}%; transform: translateX(-50%) rotate(${rotate}deg);`;
 		}
 		if (isNose) {
-			return `width: 0%; top: ${top - 20}%; transform: translateX(${translateX}%) translateY(10%) rotate(${rotate}deg); ${side === "right" ? `left: ${10 + Math.abs(rand) * 5}%;` : `right: ${Math.abs(rand) * 5}%;`}`;
+			return `width: 0%; top: ${top - 20}%; transform: translateX(${translateX}%) translateY(10%) rotate(${rotate*2}deg); ${side === "right" ? `left: ${10 + Math.abs(rand) * 5}%;` : `right: ${Math.abs(rand) * 5}%;`}`;
 		}
 		if (height == 0) {
 			return `width: ${width}%; margin-left: ${adj}%; height: ${2}%; top: ${top}%; transform: translateX(-${50 + adj}%) rotate(${rotate}deg);`;	
@@ -94,7 +112,11 @@
 
 		setTimeout(() => {
 			if (light === "on") {
+				eyewhiteStyle = baseSmileEyewhiteStyle;
+				browStyle = baseSmileBrowStyle;
+			} else {
 				eyewhiteStyle = baseEyewhiteStyle;
+				browStyle = baseBrowStyle;
 			}
 		}, config.blinkDuration);
 	}
@@ -104,7 +126,13 @@
 	}
 
 	function reset() {
-		eyewhiteStyle = baseEyewhiteStyle;
+		if (light === "on") {
+			eyewhiteStyle = baseSmileEyewhiteStyle;
+			browStyle = baseSmileBrowStyle;
+		} else {
+			eyewhiteStyle = baseEyewhiteStyle;
+			browStyle = baseBrowStyle;
+		}
 	}
 
 
@@ -112,6 +140,11 @@
 	function checkEyes() {
 		if (time > 3000) {
 			time = 0;
+		}
+		if (light === "on") {
+			eyewhiteStyle = baseSmileEyewhiteStyle;
+		} else {
+			eyewhiteStyle = baseEyewhiteStyle;
 		}
 		time++;
 		try {
@@ -121,10 +154,10 @@
 			// if (light == "off") {
 			// 	close();
 			// } else {
-				reset();
-				if (time % Math.round(50 + Math.abs(rand)*50) == 0) {
-					blink();	
-				}	
+			reset();
+			if (time % Math.round(50 + Math.abs(rand)*50) == 0) {
+				blink();	
+			}	
 			// }
 		} catch {
 
@@ -145,6 +178,11 @@
 
 	$: {
 		light;
+		if (light == "off") {
+			smiling = "smile";
+		} else {
+			smiling = "";
+		}
 	}
 
 </script>
@@ -157,8 +195,9 @@
 	<img
 	class="eyewhite eyewhite{light}"
 	style="{eyewhiteStyle}"
-	src="assets/app/eye{randImage}_{side}.png"
+	src="assets/app/eye{randImage}{smiling}_{side}.png"
 	/>
+	<div class="undereye {light}" style="background: {color}; {eyewhiteStyle}"></div>
 	<!-- {:else}
 	<img
 	class="eyewhite eyewhite{light}"
@@ -191,13 +230,6 @@
 		font-weight:  bold;
 		text-shadow:  0px 0px 8px #000;
 	}
-/* 	.eye {
-		position: absolute;
-		background: white;
-		border: 1px solid #666;
-		box-shadow: inset 2px 2px 12px 2px #000;
-		transition: all 0.2s ease-in-out;
-	} */
 	.nose {
 		border-left: 2px solid transparent;
 		border-right: 2px solid transparent;
@@ -210,10 +242,12 @@
 		max-width: none;
 		width: 130%;
 		position: absolute;
+		image-rendering: pixelated;
 	}
 	.hair.back {
 		z-index: -1;
 		width: 120%;
+		image-rendering: pixelated;
 	}
 	.lefteye .hair {
 		left: -10%;
@@ -256,20 +290,19 @@
 		height: 100%;
 		top: 0%;
 		position: absolute;
-/* 		transform-origin: 50% 50%; */
-transition: all 0.8s ease-in-out;
-opacity:  1;
-}
-.lefteye {
-	left: 0%;
-}
-.lefteye:after {
-	content: "";
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 60%;
-	height: 200%; /* Ensure it covers the entire element */
+		transition: all 0.8s ease-in-out;
+		opacity:  1;
+	}
+	.lefteye {
+		left: 0%;
+	}
+	.lefteye:after {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 60%;
+		height: 200%; /* Ensure it covers the entire element */
 /* 		background: linear-gradient(to right, rgba(40, 0, 48, 1), rgba(40, 0, 48, 0)); */
 pointer-events: none; /* Optional: Prevent interactions */
 }
@@ -309,6 +342,9 @@ pointer-events: none; /* Optional: Prevent interactions */
 	transform-origin: 50% 50%;
 
 }
+.on .eyewhite {
+/* 	margin-top: 15%; */
+}
 .brow {
 	position: absolute;
 	width: 50%;
@@ -319,4 +355,24 @@ pointer-events: none; /* Optional: Prevent interactions */
 	transform-origin: 50% 50%;
 	opacity: 0.6;
 }
+.undereye {
+	opacity: 0;
+		transition: background 500ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
+		transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000); /* linear */
+}
+.undereye.on {
+	opacity: 1;
+    position: absolute;
+    width: 200%;
+    height: 10% !important;
+    background: white;
+    margin-top:  30% !important;
+    left: 50%;
+    border-radius: 50%;
+    border-top: 3px solid rgba(0,0,0,0.1);
+}
+
+
+
+
 </style>
