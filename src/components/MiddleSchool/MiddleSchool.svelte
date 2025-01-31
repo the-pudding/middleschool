@@ -10,7 +10,8 @@
 	let sort_attribute = null;
 	let grades = [];
 	const allGrades = [4,5,6,7,8,9,10,11,12];
-
+	let oWidth = 600;
+	let oHeight = 600;
 
 	let offset = 0;
 	let marginLeft = 0;
@@ -45,60 +46,41 @@
 		}
 	}
 
-	let animationIntervals = {}; // Store ongoing animations
+	let animationFrames = {}; // Store ongoing animations
 
 	function animateValue(grade, newValue) {
+	    if (typeof window === "undefined") return; // Prevent errors in SSR or non-browser contexts
+
 	    const duration = 1000; // Animation duration in ms
-	    const frameRate = 30; // Frames per second
-	    const steps = Math.round((duration / 1000) * frameRate);
-	    const startValue = displayedValues[grade] ?? 0; // Ensure a defined value
-	    let stepValue = (newValue - startValue) / steps;
+	    const startValue = displayedValues[grade] ?? 0;
+	    const totalFrames = 60; // Assume 60 FPS
+	    let step = (newValue - startValue) / totalFrames;
+	    let frame = 0;
 
-	    if (stepValue === 0) return; // Prevent unnecessary animation
-
-	    stepValue = stepValue > 0 ? Math.max(1, stepValue) : Math.min(-1, stepValue); // Ensure at least ±1 per step
-
-	    if (animationIntervals[grade]) {
-	        clearInterval(animationIntervals[grade]); // Stop previous animation
+	    if (animationFrames[grade]) {
+	        cancelAnimationFrame(animationFrames[grade]);
 	    }
 
-	    let currentStep = 0;
-	    animationIntervals[grade] = setInterval(() => {
-	        currentStep++;
-	        displayedValues[grade] = Math.round(startValue + stepValue * currentStep);
+	    function stepAnimation() {
+	        if (typeof window === "undefined") return; // Ensure we’re in a browser
 
-	        if (currentStep >= steps) {
-	            clearInterval(animationIntervals[grade]);
-	            delete animationIntervals[grade]; // Cleanup
+	        frame++;
+	        displayedValues[grade] = Math.round(startValue + step * frame);
+
+	        if (frame < totalFrames) {
+	            animationFrames[grade] = window.requestAnimationFrame(stepAnimation);
+	        } else {
 	            displayedValues[grade] = Math.round(newValue); // Ensure final value is exact
+	            delete animationFrames[grade]; // Cleanup
 	        }
-	    }, duration / steps);
+	    }
+
+	    stepAnimation(); // Start animation
 	}
 
 
-	function addOrdinalSuffix(num) {
-		if (typeof num !== "number" || isNaN(num)) {
-			throw new Error("Input must be a valid number");
-		}
 
-		const remainder10 = num % 10;
-		const remainder100 = num % 100;
-
-		if (remainder100 >= 11 && remainder100 <= 13) {
-			return `${num}th`;
-		}
-
-		switch (remainder10) {
-		case 1:
-			return `${num}st`;
-		case 2:
-			return `${num}nd`;
-		case 3:
-			return `${num}rd`;
-		default:
-			return `${num}th`;
-		}
-	}
+	
 	function checkOpacity(grade) {
 		if (grades.indexOf(grade) !== -1) {
 			return 1;
@@ -106,21 +88,14 @@
 		return 0;
 	}
 
-	function getSchoolType(grade) {
-		if (grade < 6) {
-			return "Elementary school";
-		} else if (grade < 9) {
-			return "Middle school";
-		} else {
-			return "High school"
-		}
-	}
+	
 
 	let intro = true;
 	let quote = ""
 	let quote_id = null;
 	let hl = 0;
 	let customSpeed = 200;
+	let talkers = [];
 	$: {
 	    if (typeof value !== "number") {
 	        intro = true;
@@ -142,7 +117,6 @@
 	    hl = copy.story[value].hl ? 1 : 0;
 	    sorted = Number(copy.story[value]?.sorted) || 1;
 	    customSpeed = Number(copy.story[value]?.speed) || null;
-
 	    hlmiddle = kid_id ? "hlmiddle" : "no_hlmiddle";
 
 	    allGrades.forEach((grade) => {
@@ -157,15 +131,15 @@
 
 </script>
 <svelte:options runes="{false}" />
-<div class="outsideContainer">
+<div class="outsideContainer" bind:clientWidth={oWidth} bind:clientHeight={oHeight} >
 	<section id="scrolly">
 		<div class="visualContainer">
 			{#if attribute != "id"}
 			<div class="metricName" transition:fade>{attribute.replace("School ","")}</div>
 			{/if}
-			<div class="slidingContainer" style="left: {marginLeft}%;">
+			<div class="slidingContainer" style="transform: translate3d({marginLeft}%,0,0);">
 				{#each allGrades as grade, i}
-				<!-- {#if grades.indexOf(grade) !== -1} -->
+				{#if grades.indexOf(grade) !== -1}
 				<div 
 				class="gradeContainer {hlmiddle} {getGradeColor(grade)}" 
 				style="left: {i * 33.3333333333}%; opacity: {checkOpacity(grade)}" 
@@ -191,19 +165,13 @@
 				{quote_id}
 				{customSpeed}
 				{grades}
+				{oWidth}
+				{oHeight}
 				{hl}
 				proportions={proportions[(grade - 4)]}
 				/>
-				<div class="gradeLevel">
-					{#if kid_id == null}
-						<span transition:fade>{addOrdinalSuffix(grade)}
-							<br>
-							<span class="schoolType">{getSchoolType(grade)}</span>
-						</span>
-					{/if}
-				</div>
 			</div>
-			<!-- {/if} -->
+			{/if}
 			{/each}
 		</div>
 
@@ -268,34 +236,10 @@
 		padding: 0px 5px;
 /* 		font-weight: bold; */
 	}
-	.gradeLevel {
-		width:  100%;
-		text-align:  center;
-		font-size: 25px;
-		height:  25px;
-		padding:  0px;
-		color: var(--color-light);
-		font-weight: bold;
-/* 		text-transform: uppercase; */
-		position: absolute;
-		bottom:  40px;
-	}
-	.schoolType {
-		font-size: 15px;
-		font-weight: normal;
-		margin-top: -5px;
-		display: block;
-	}
-	@media screen and (max-width: 500px) {
-		.gradeLevel {
-			font-size:  16px;
-			height:  20px;
-			padding:  2px 0;
-		}
-	}
+	
 	.slidingContainer {
-		transition: left 2000ms cubic-bezier(0.250, 0.100, 0.250, 1.000); /* ease (default) */
-		transition-timing-function: cubic-bezier(0.250, 0.100, 0.250, 1.000); /* ease (default) */
+		transform: translate3d(var(--x), 0, 0);
+  		transition: transform 2000ms cubic-bezier(0.250, 0.100, 0.250, 1.000);
 		position: absolute;
 		width:  100%;
 		left:  0;
@@ -318,16 +262,4 @@
 	.gradeContainer.grade9.no_hlmiddle {
 		border-left: 2px solid rgba(255,255,255,0.5);
 	}
-
-
-	/* .gradeContainer.elementary {
-		background:  var(--color-elementary);
-	} */
-	/* .gradeContainer.high {
-		background:  var(--color-high);
-	} */
-	/* .gradeContainer.middle .gradeLevel {
-		color:  #aaa;
-	} */
-	
 </style>

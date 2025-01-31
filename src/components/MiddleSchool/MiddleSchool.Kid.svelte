@@ -1,9 +1,9 @@
 <script>
-	import { onMount } from "svelte";
+	import { onMount, onDestroy } from "svelte";
 	import { fade } from 'svelte/transition';
 	import Eye from "$components/MiddleSchool/MiddleSchool.Eye.svelte";
 	import Text from "$components/MiddleSchool/MiddleSchool.Text.svelte";
-	export let d, attribute, positionLookup, kid_id, exclude, grade, sort_attribute, quote, quote_id, value, grades;
+	export let d, attribute, positionLookup, kid_id, exclude, grade, sort_attribute, quote, quote_id, value, grades, talkers, hl_kid, zoomed;
 	let rand = seededRandom(d.id + 8);
 	let rand2 = seededRandom(d.id + 2);
 	let rand3 = seededRandom(d.id + 1);
@@ -13,6 +13,7 @@
 	let ty = 0;
 	let tx = 0;
 	let time = 800;
+	let quoteOpacity = 0;
 	const imageType = grade < 6 ? "kid" : "full";
 
 	
@@ -38,31 +39,37 @@
 	}
 
 	function adjustColor(color) {
-		// console.log(positionLookup.light)
-	    // Convert hex to RGB
-	    if (positionLookup.light == "neutral") {
-	    	return color;
+	    if (positionLookup.light === "neutral") {
+	        return color;
 	    }
+
+	    // Convert hex to RGB
 	    let [r, g, b] = color.match(/\w\w/g).map((c) => parseInt(c, 16));
+
 	    if (positionLookup.light === "off") {
-	        // Darken and desaturate the color to simulate shadows
-	        const shadowFactor = 0.3; // Retains depth while reducing brightness
+	        // Darken and slightly desaturate for shadow effect
+	        const shadowFactor = 0.25; // Retains depth while reducing brightness
 	        r = Math.floor(r * shadowFactor);
 	        g = Math.floor(g * shadowFactor);
 	        b = Math.floor(b * shadowFactor);
 	        return `rgb(${r}, ${g}, ${b})`;
 	    } else {
 	        // Yellow light color (#FFD375)
-	        const lightR = 255, lightG = 211, lightB = 117;
+	        const lightR = 180, lightG = 130, lightB = 120;
 
-	        // Blend the original color with the yellow light (soft impact)
-	        const blendFactor = 0.3; // Reduces yellow intensity
+	        // Blend the original color with the yellow light (stronger blend for warmth)
+	        const blendFactor = 0.6; // More yellow influence
 	        r = Math.round(r * (1 - blendFactor) + lightR * blendFactor);
 	        g = Math.round(g * (1 - blendFactor) + lightG * blendFactor);
 	        b = Math.round(b * (1 - blendFactor) + lightB * blendFactor);
 
-	        // Apply slight contrast enhancement
-	        const contrastFactor = 1.1;
+	        // Strengthen purple undertones
+	        const purpleBoost = 0.15; // Enhances purplish tones without overpowering
+	        r = Math.round(r * (1 - purpleBoost) + 128 * purpleBoost);
+	        b = Math.round(b * (1 + purpleBoost)); // Slightly boosts blue to preserve depth
+
+	        // Apply contrast enhancement
+	        const contrastFactor = 1.05;
 	        r = Math.min(255, Math.max(0, Math.round((r - 128) * contrastFactor + 128)));
 	        g = Math.min(255, Math.max(0, Math.round((g - 128) * contrastFactor + 128)));
 	        b = Math.min(255, Math.max(0, Math.round((b - 128) * contrastFactor + 128)));
@@ -124,20 +131,21 @@
 
 
 	function getColor(race, eth, grade) {
-		let colors;
-		if (race === "Black") {
-			colors = ["#8a4a80", "#7a3f73", "#97578f", "#854b7d", "#9b6096"];
-		} else if (race === "White" && eth === "Latinx") {
-			colors = ["#b05496", "#9a4885", "#c169aa", "#a15b91", "#b26a9e"];
-		} else if (race === "White") {
-			colors = ["#d28ed4", "#c17fc3", "#e3a1e3", "#ae6ea8", "#c07cb8"];
-		} else {
-			colors = ["#b26ba1", "#9e5a92", "#ca82b5", "#af739e", "#9e608a"];
-		}
+	    let colors;
+	    if (race === "Black") {
+	        colors = ["#3d1f3a", "#732e64"]; // Darker, higher contrast
+	    } else if (race === "White" && eth === "Latinx") {
+	        colors = ["#7b315b", "#b14d8a"]; // Stronger contrast with fewer colors
+	    } else if (race === "White") {
+	        colors = ["#b06ba1", "#e3a1e3"]; // Keeping some lightness but increasing contrast
+	    } else {
+	        colors = ["#7e3f69", "#b76aa1"]; // More contrast in mid-tones
+	    }
 
-		const randomColor = colors[Math.floor(Math.abs(rand2) * colors.length)];
-		return adjustColor(randomColor);
+	    const randomColor = colors[Math.floor(Math.abs(rand2) * colors.length)];
+	    return adjustColor(randomColor);
 	}
+
 
 	function meanderRandom(seed) {
 		return function () {
@@ -163,33 +171,47 @@
 	    ty = randTy( (-(14 - grade)/1.5)*rand, ((14- grade)/1.5)*rand ); // Meander ty
 	}
 
-	function checkMeander() {
-		if (time > 3000) {
-			time = 0;
-		}
-		time++;
-		try {
-			if (time % Math.round(10 + Math.abs(rand)*10) == 0) {
-				meander();
-			}
-		} catch {
+	let animationFrame;
 
-		}
+	function checkMeander() {
+	    if (time > 3000) {
+	        time = 0;
+	    }
+	    time++;
+
+	    if (time % Math.round(10 + Math.abs(rand) * 10) == 0) {
+	        meander();
+	    }
+
+	    animationFrame = requestAnimationFrame(checkMeander);
 	}
 
 	onMount(() => {
-		setInterval(checkMeander, 100)
+    	animationFrame = requestAnimationFrame(checkMeander);
+	});
+
+	onDestroy(() => {
+	    cancelAnimationFrame(animationFrame);
 	});
 	let quotePosition = ["left",0];
+	let scale = 1;
 	$: {
 		value;
 		color = getColor(d.student_race, d.student_ethnicity, grade);
 		if (quote_id == d.id) {
-			quotePosition = ["left",0];
-		} else if (grades.indexOf(grade) / grades.length > 0.5 || grades.length == 1) {
+			quoteOpacity = 1;
+		} else {
+			quoteOpacity = 0;
+		}
+		if ( (grades.indexOf(grade) / grades.length >= 0.5 || grades.length == 1) && kid_id == null) {
 			quotePosition = ["right",-100];
 		} else {
 			quotePosition = ["left",0];
+		}
+		if (zoomed == "") {
+			scale = 1;
+		} else {
+			scale = 1 / Number(zoomed.replace("zoomed",""));	
 		}
 	}
 </script>
@@ -198,13 +220,12 @@
 
 <svelte:options runes="{false}" />
 <div class="eye {positionLookup.light}" style="
-left: {positionLookup.x}px;
-top: {positionLookup.y}px;
+transform: translate3d({positionLookup.x}px, {positionLookup.y}px, 0);
 z-index: {positionLookup.z};
 width: {positionLookup.w}px;
 height: {positionLookup.h}px;
 opacity: {positionLookup.opacity};
-transition: transform 500ms linear, opacity 500ms linear, background 500ms linear, left {Math.round(positionLookup.speed + 300*rand2)}ms cubic-bezier(0.420, 0.000, 0.580, 1.000), top {Math.round(positionLookup.speed + 300*rand)}ms cubic-bezier(0.420, 0.000, 0.580, 1.000); 
+transition: transform {Math.round(positionLookup.speed + 300*rand2)}ms cubic-bezier(0.420, 0.000, 0.580, 1.000), background 500ms linear, opacity 1500ms linear; 
 ">
 <div class="face" style="background: {color}; transform: translate({Math.round(tx)}%,{Math.round(ty)}%); width: {Math.round(64 + rand*5) }%; left: { Math.round((100 - (64 + rand*5))/2) }%;">
 	<Eye side="left" {color} {rand} {rand2} {rand3} light={positionLookup.light} {grade}/>
@@ -218,11 +239,13 @@ transition: transform 500ms linear, opacity 500ms linear, background 500ms linea
 <!-- <div class="sort_attribute">{d.id}</div> -->
 </div>
 
-{#if quote_id == d.id}
+{#if hl_kid.includes(d.id)}
 	<div class="quote {quotePosition[0]}" style="
 	left: {positionLookup.x - positionLookup.w / 10.5 + quotePosition[1]}px;
 	top: {positionLookup.y + positionLookup.h + 20}px;
-	transition: left {Math.round(positionLookup.speed + 300*rand2)}ms cubic-bezier(0.420, 0.000, 0.580, 1.000), top {Math.round(positionLookup.speed + 300*rand)}ms cubic-bezier(0.420, 0.000, 0.580, 1.000), transform 500ms linear, opacity 500ms linear;
+/* 	transform: scale({scale}); */
+	opacity: {quoteOpacity};
+	transition: transform {Math.round(positionLookup.speed + 500*rand2)}ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
 	" transition:fade>
 	<Text copy={quote} /></div>
 {/if}
@@ -240,7 +263,7 @@ transition: transform 500ms linear, opacity 500ms linear, background 500ms linea
 		position: absolute;
 		overflow:  hidden;
 		transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000); 
-		image-rendering: pixelated;
+		image-rendering: crisp-edges;
 		box-shadow: inset 0px 2px 8px -2px #000;
 /* 		transform: translate3d(0,0,0); */
 	}

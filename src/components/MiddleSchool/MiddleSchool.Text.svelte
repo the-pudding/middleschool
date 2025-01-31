@@ -6,7 +6,7 @@
 		let finalText = [];
 		let inList = false;
 
-		if (text !== undefined) {
+		if (text != undefined) {
 			let textArray = text.split(/\n/); // Split by single newlines
 			textArray.forEach(function (line) {
 				// Convert Markdown links [text](url) to HTML <a> tags

@@ -149,34 +149,25 @@
 
 	    // Initial width and height calculations
 	    if (containerWidth > 600) {
-	    	w = containerWidth / 6;
+	    	w = containerWidth / 6 * 1.414;
 	    	h = w / 2;
 	    } else if (containerWidth < 400) {
-	    	w = containerWidth / 4;
+	    	w = containerWidth / 4 * 1.414;
 	    	h = w / 2;
 	    } else {
-	    	w = containerWidth / 5;
+	    	w = containerWidth / 5 * 1.414;
 	    	h = w / 2;
 	    }
 
-	    // For grade <= 5, increase size while maintaining aspect ratio
-	    let scaleFactor = 1.414; // √2
-	    let boxHeight = h; // Base height
-	    // if (grade <= 5) {
-	    	w *= scaleFactor;
-	    	h *= scaleFactor;
-	        boxHeight = h; // Update box height for scaled boxes
-	    // }
-
 	    // Calculate rows and ensure padding consistency
 	    cols = Math.floor((containerWidth - 2 * borderPadding + padding) / (w + padding));
-	    rows = Math.floor((containerHeight - 2 * borderPadding + padding) / (boxHeight + padding));
+	    rows = Math.floor((containerHeight - 2 * borderPadding + padding) / (h + padding));
 
 	    // Ensure total height fits within the container
-	    let totalHeight = rows * boxHeight + (rows - 1) * padding;
+	    let totalHeight = rows * h + (rows - 1) * padding;
 	    if (totalHeight > containerHeight - 2 * borderPadding) {
 	        rows -= 1; // Reduce rows if they exceed the container height
-	        totalHeight = rows * boxHeight + (rows - 1) * padding;
+	        totalHeight = rows * h + (rows - 1) * padding;
 	    }
 
 	    // Adjust padding slightly to ensure alignment
@@ -216,7 +207,7 @@
 
 
 			if (containerWidth < 200) {
-				scale = 3;
+				scale = 5;
 			} else if (containerWidth < 666) {
 				scale = 2;
 			} else {
@@ -239,7 +230,38 @@
 		}
 	}
 
+	function addOrdinalSuffix(num) {
+		if (typeof num !== "number" || isNaN(num)) {
+			throw new Error("Input must be a valid number");
+		}
 
+		const remainder10 = num % 10;
+		const remainder100 = num % 100;
+
+		if (remainder100 >= 11 && remainder100 <= 13) {
+			return `${num}th`;
+		}
+
+		switch (remainder10) {
+		case 1:
+			return `${num}st`;
+		case 2:
+			return `${num}nd`;
+		case 3:
+			return `${num}rd`;
+		default:
+			return `${num}th`;
+		}
+	}
+	function getSchoolType(grade) {
+		if (grade < 6) {
+			return "Elementary";
+		} else if (grade < 9) {
+			return "Middle";
+		} else {
+			return "High school"
+		}
+	}
 
 
 	// Reactive statement to recalculate positions when value or attribute changes
@@ -259,19 +281,53 @@
 	{#each data as d}
 	{#if d.id in positionLookup}
 	<!-- <div style="transform: translateZ(0);" transition:fade> -->
-		<Kid {d} {quote} {value} {quote_id} positionLookup={positionLookup[d.id]} {sort_attribute} {attribute} {kid_id} {exclude} grade={d.respondent_grade_level} {grades}/>
-	<!-- </div> -->
-	{/if}
-	{/each}
-	{/key}
-</div>
+		<Kid {zoomed} {d} {quote} {value} {quote_id} positionLookup={positionLookup[d.id]} {sort_attribute} {hl_kid} {attribute} {kid_id} {exclude} grade={d.respondent_grade_level} {grades}/>
+		<!-- </div> -->
+		{/if}
+		{/each}
+		{/key}
 
-<style>
-	.eyes {
-		top:  80px;
-		width: 100%;
-		height: calc(100vh - 130px);
-		position: relative;
-/* 		box-sizing: content-box; */
-}
-</style>
+		<div class="gradeLevel" style="top:{rows * (h+padding)}px;">
+			{#if kid_id == null}
+			<span transition:fade>{addOrdinalSuffix(grade)}
+				<br>
+				<span class="schoolType">{getSchoolType(grade)}</span>
+			</span>
+			{/if}
+		</div>
+	</div>
+
+	<style>
+		.eyes {
+			top:  80px;
+			width: 100%;
+			height: calc(100vh - 130px);
+			position: relative;
+		}
+		.gradeLevel {
+			width:  100%;
+			text-align:  center;
+			font-size: 25px;
+			height:  25px;
+			padding:  0px;
+			color: var(--color-light);
+			font-weight: bold;
+			position: absolute;
+			margin-top: 20px;
+		}
+
+		.schoolType {
+			font-size: 15px;
+			font-weight: normal;
+			margin-top: -5px;
+			display: block;
+		}
+		@media screen and (max-width: 500px) {
+			.gradeLevel {
+				font-size:  16px;
+				height:  20px;
+				padding:  2px 0;
+				bottom:  40px;
+			}
+		}
+	</style>

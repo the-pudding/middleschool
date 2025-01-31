@@ -90,6 +90,7 @@ html, #content, header {
 
 html {
 	overflow-x: hidden;
+	background: var(--bgcolor);
 }
 #content {
 	font-family: var(--sans) !important;
@@ -144,7 +145,7 @@ html {
 }
 
 .step {
-/* 	pointer-events: none; */
+	pointer-events: none;
 height: auto;
 font-size: 17px;
 line-height: 22px;
@@ -170,8 +171,8 @@ box-sizing: content-box;
 	background: linear-gradient(
 		to bottom,
 		transparent 0%, /* Start with the background color */
-		var(--bgcolor) 15%, /* Fade to transparent at the top */
-		var(--bgcolor) 85%, /* Background color in the middle */
+		var(--bgcolor) 5%, /* Fade to transparent at the top */
+		var(--bgcolor) 95%, /* Background color in the middle */
 		transparent 100% /* Fade to transparent at the bottom */
 	);
 	min-height: 100vh;
@@ -238,31 +239,31 @@ position: relative;
 	position: absolute;
 	font-size: 17px;
 	line-height:  22px;
-/* 	color:  #fed4ff; */
-/* 	background:  var(--color-dark); */
-color:  black;
-background: white;
-box-shadow: 0px 0px 20px 0px #000;
-pointer-events: all;
-border-radius: 10px;
-padding: 1.2rem;
-/* 	min-width: 120px; */
-max-width: 400px;
-/* 	width: 250px; */
-transform-origin: top left;
-z-index:  999;
+	color:  black;
+	background: white;
+	box-shadow: 0px 0px 20px 0px #000;
+	pointer-events: all;
+	border-radius: 10px;
+	padding: 1.2rem;
+	min-width: 150px;
+	max-width: 400px;
+	transform-origin: top left;
+	z-index:  999;
 }
 
 @media screen and (max-width: 860px) {
 	.quote {
 		font-size: 16px;
 		line-height:  20px;
+		min-width: 150%;
+		padding: 1rem;
 	}
 }
 @media screen and (max-width: 600px) {
 	.quote {
 		font-size: 15px;
 		line-height:  19px;
+		padding: 0.8rem;
 	}
 }
 .quote::after {
@@ -275,13 +276,18 @@ z-index:  999;
 	border-style: solid;
 	border-width: 10px 20px 10px 20px;
 	/* 	border-color: transparent transparent #fed4ff transparent; */
-/* 	border-color: transparent transparent transparent #fed4ff; */
-border-color: transparent transparent transparent white;
-transform: rotate(270deg);
+	/* 	border-color: transparent transparent transparent #fed4ff; */
+	border-color: transparent transparent transparent white;
+	transform: rotate(270deg);
 }
+
 .quote.right::after {
 	left:  auto;
-	right: 20px;
+	right: 33%;
+}
+.zoomed5 .quote {
+	transform: scale(0.2);
+	margin-top: -10%;
 }
 .zoomed3 .quote {
 	transform: scale(0.33333);
@@ -319,11 +325,14 @@ transform: rotate(270deg);
 	padding-bottom:  0px;
 	margin-bottom:  0px;
 }
-.step .textContainer .citation {
+.step .textContainer .citation, .step .textContainer .citation a {
 	font-size: 13px;
 	opacity: 0.6;
 	line-height: 17px;
-	color: black;
+	color: var(--color-light-hl);
+}
+.step .textContainer .citation {
+	margin-top: 20px;
 }
 .mobileImage {
 	display:  none;
@@ -362,6 +371,7 @@ transform: rotate(270deg);
 	padding: 50px 0 200px;
 	margin: 0 auto 100px;
 	line-height: 1.6rem;
+	padding:  50px 20px 100px;
 	background: #1f0c1d; /* Solid background */
 }
 .methodology a {
@@ -388,4 +398,9 @@ transform: rotate(270deg);
 	height: 100px; /* Adjust height for smoother fade */
 	background: linear-gradient(to bottom, rgba(31, 12, 29, 1) 0%, rgba(255, 255, 255, 0) 100%);
 	pointer-events: none; /* Ensures it doesn't interfere with clicks */
+}
+.eyes img {
+	image-rendering: -webkit-optimize-contrast;
+	will-change: transform;
+	backface-visibility: hidden;
 }

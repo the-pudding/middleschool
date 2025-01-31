@@ -191,31 +191,17 @@
 <div class="{side}eye oneeye {light}">
 	<div class="ear" style="background: {color}; height: {20 + Math.abs(rand)*10}%; width: {10 + Math.abs(rand2)*5}%; top: {45 + Math.abs(rand2)*10}%;"></div>
 	<div class="nose" style="{noseStyle}"></div>
-	<!-- {#if light == "on"} -->
 	<img
 	class="eyewhite eyewhite{light}"
 	style="{eyewhiteStyle}"
 	src="assets/app/eye{randImage}{smiling}_{side}.png"
 	/>
 	<div class="undereye {light}" style="background: {color}; {eyewhiteStyle}"></div>
-	<!-- {:else}
-	<img
-	class="eyewhite eyewhite{light}"
-	style="{eyewhiteStyle}"
-	src="assets/app/eyeclosed_{side}.png"
-	/>
-	{/if} -->
 	<img
 	class="brow"
 	style="{browStyle}"
 	src="assets/app/brow{randImage2}_{side}.png"
 	/>
-	<!-- <img
-	class="hair" 
-	style="top: -8%; height: {100 + (rand*10)}%;"
-	src="assets/app/hair{randImage3}_{side}.png"
-	/> -->
-	<!-- <div class="sort_attribute">{randImage3}</div> -->
 </div>
 
 <style>
@@ -242,12 +228,10 @@
 		max-width: none;
 		width: 130%;
 		position: absolute;
-		image-rendering: pixelated;
 	}
 	.hair.back {
 		z-index: -1;
 		width: 120%;
-		image-rendering: pixelated;
 	}
 	.lefteye .hair {
 		left: -10%;
@@ -350,7 +334,7 @@ pointer-events: none; /* Optional: Prevent interactions */
 	width: 50%;
 	height: 8px;
 	left:  50%;
-	margin-top: -6px;
+	margin-top: -15%;
 	transition: all 0.1s ease-in-out;
 	transform-origin: 50% 50%;
 	opacity: 0.6;
