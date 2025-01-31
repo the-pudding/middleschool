@@ -232,6 +232,10 @@
 		{/each}
 	</Scrolly>
 </section>
+<div class="methodology">
+	<h3>Methodology and more</h3>
+	<Text copy={copy.methodology} />
+</div>
 </div>
 
 <style>
@@ -314,6 +318,8 @@
 	.gradeContainer.grade9.no_hlmiddle {
 		border-left: 2px solid rgba(255,255,255,0.5);
 	}
+
+
 	/* .gradeContainer.elementary {
 		background:  var(--color-elementary);
 	} */

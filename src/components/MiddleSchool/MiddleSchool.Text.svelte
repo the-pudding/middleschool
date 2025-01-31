@@ -48,9 +48,9 @@
 
 				// Process image notation
 				if (line.indexOf("IMAGE|") !== -1) {
-					line = '<div class="imageContainer"><img class="desktopImage" src="assets/leftovers/' +
+					line = '<div class="imageContainer"><img class="desktopImage" src="assets/app/' +
 					line.replace("IMAGE|", "").replace(/(\r\n|\n|\r)/gm, "") +
-					'.svg"/><img class="mobileImage" src="assets/leftovers/' +
+					'.svg"/><img class="mobileImage" src="assets/app/' +
 					line.replace("IMAGE|", "").replace(/(\r\n|\n|\r)/gm, "") +
 					'_mobile.svg"/></div>';
 				}
@@ -100,3 +100,4 @@
 <div class="textContainer">
 	{@html convertToHTML(copy)}
 </div>
+

@@ -10,4 +10,4 @@
 
 <MiddleSchool {copy} {data} {proportions}/>
 
-<!-- <Footer recirc={true} /> -->
+<Footer recirc={true} />

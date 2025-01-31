@@ -212,7 +212,6 @@ transition: transform 500ms linear, opacity 500ms linear, background 500ms linea
 	{#if rand > 0.5}
 		<img class="glasses" style="top: {26 + Math.round(Math.abs(rand) * 3)}%;" src="assets/app/glasses{Math.floor(Math.abs(rand)*3)}.png" />
 	{/if}
-	<div class="grain"></div>
 	<img class="hair" src="assets/app/{imageType}hair{randImage}.png" />
 </div>
 <!-- <div class="sort_attribute">{Math.round(d[sort_attribute])}</div> -->
@@ -242,7 +241,7 @@ transition: transform 500ms linear, opacity 500ms linear, background 500ms linea
 		overflow:  hidden;
 		transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000); 
 		image-rendering: pixelated;
-		box-shadow: inset 0px 5px 15px 0px #000;
+		box-shadow: inset 0px 2px 8px -2px #000;
 /* 		transform: translate3d(0,0,0); */
 	}
 	.eye.on {

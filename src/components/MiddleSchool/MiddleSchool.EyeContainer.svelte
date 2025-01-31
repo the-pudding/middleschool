@@ -11,8 +11,8 @@
 	let positionLookup = {};
 
 	// Constants for padding and item sizes
-	let padding = 8;
-	let borderPadding = 12;
+	let padding = 0;
+	let borderPadding = 20;
 	let w = 80;
 	let h = 40;
 	let cols = 15;
@@ -180,10 +180,10 @@
 	    }
 
 	    // Adjust padding slightly to ensure alignment
-	    let remainingSpace = containerHeight - totalHeight - 2 * borderPadding;
-	    if (remainingSpace > 0) {
-	        padding += remainingSpace / (rows - 1); // Distribute extra space evenly
-	    }
+	    // let remainingSpace = containerHeight - totalHeight - 2 * borderPadding;
+	    // if (remainingSpace > 0) {
+	    //     padding += remainingSpace / (rows - 1); // Distribute extra space evenly
+	    // }
 
 	    // Recalculate items
 	    items = cols * rows;
