@@ -2,9 +2,9 @@
 	import { fade } from 'svelte/transition';
 	import { onMount } from "svelte";
 	import Kid from "$components/MiddleSchool/MiddleSchool.Kid.svelte";
-
-	export let data, kid_id, hl_kid, sorted, value, attribute, exclude, sort_attribute, proportions, grade, quote, quote_id, hl, customSpeed, grades;
-
+	let isWebKit = false;
+	let isMobileWebKit = false;
+	export let data, kid_id, hl_kid, sorted, value, attribute, exclude, sort_attribute, proportions, grade, quote, quote_id, hl, customSpeed, grades, prefersReducedMotion;
 	let oldvalue = -1;
 	let loaded = false;
 	let positionDataCopy = [];
@@ -94,6 +94,12 @@
 			} else {
 				opacity = 1;
 			}
+			let w1 = w;
+			let h1 = h;
+			if (kid_id == d.id && isMobileWebKit) {
+				w1 = w * 4;
+				h1 = w * 2;
+			}
 			let speed = 1000 + 2000 * Math.random();
 			if (hl_kid.indexOf(d.id) != -1) {
 				speed = 1900;
@@ -101,7 +107,7 @@
 			if (customSpeed < 0) {
 				speed = customSpeed;
 			}
-			positionLookup[d.id] = { x, y, w, h, v, z, speed, opacity, light };	
+			positionLookup[d.id] = { x, y, w: w1, h: h1, v, z, speed, opacity, light };	
 		});
 
 		// Adjust to match targetOnCount
@@ -135,6 +141,16 @@
 
 	// Update positions on mount and resize
 	onMount(() => {
+		 const userAgent = navigator.userAgent;
+
+	    // Check if the browser uses WebKit (excluding Edge, Opera, and Chromium-based browsers)
+	    isWebKit = /WebKit/.test(userAgent) && !/Edge|OPR|Chromium/.test(userAgent);
+
+	    // Mobile WebKit check: Detects iOS Safari and WebView browsers
+	    isMobileWebKit = isWebKit && (
+	      /iPhone|iPad|iPod/.test(userAgent) || // iOS device check
+	      (navigator.maxTouchPoints > 0 && /Macintosh/.test(userAgent)) // Detects iPadOS
+	    );
 		handleResize();
 		checkZoom();
 		setInterval(function() {
@@ -205,8 +221,9 @@
 			const target = positionLookup[positionDataCopy[0]?.id];
 			zoomed = "zoomed";
 
-
-			if (containerWidth < 200) {
+			if (isMobileWebKit) {
+				scale = 1;
+			} else if (containerWidth < 200) {
 				scale = 5;
 			} else if (containerWidth < 666) {
 				scale = 2;
@@ -281,7 +298,7 @@
 	{#each data as d}
 	{#if d.id in positionLookup}
 	<!-- <div style="transform: translateZ(0);" transition:fade> -->
-		<Kid {zoomed} {d} {quote} {value} {quote_id} positionLookup={positionLookup[d.id]} {sort_attribute} {hl_kid} {attribute} {kid_id} {exclude} grade={d.respondent_grade_level} {grades}/>
+		<Kid {prefersReducedMotion} {zoomed} {d} {quote} {value} {quote_id} positionLookup={positionLookup[d.id]} {sort_attribute} {hl_kid} {attribute} {kid_id} {exclude} grade={d.respondent_grade_level} {grades}/>
 		<!-- </div> -->
 		{/if}
 		{/each}

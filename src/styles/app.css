@@ -105,6 +105,10 @@ html {
 	overflow: hidden;
 /* 	background-image:  url('assets/app/grain.png'); */
 }
+.reducedMotiontrue * {
+	animation: none !important;
+	transition: none !important;
+}
 .visualContainer .hedContainer {
 	position: absolute;
 	width:  100%;
@@ -296,12 +300,15 @@ position: relative;
 		width: 200px;
 	}
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 450px) {
 	.quote {
 		font-size: 15px;
 		line-height:  19px;
 		padding: 0.8rem;
 		width: 150px;
+	}
+	.quote.right {
+		margin-left: 50px;
 	}
 }
 .quote::after {
@@ -324,10 +331,10 @@ position: relative;
 	right: 33%;
 }
 .zoomed5 .quote {
-	transform: scale(0.2);
+/* 	transform: scale(0.2); */
 	margin-top: -10%;
 }
-.zoomed3 .quote {
+/* .zoomed3 .quote {
 	transform: scale(0.33333);
 }
 .zoomed2 .quote {
@@ -335,10 +342,10 @@ position: relative;
 }
 .zoomed15 .quote {
 	transform: scale(0.6666);
-}
-.zoomed .quote {
+} */
+/* .zoomed .quote, .zoomed1 .quote {
 	transform: scale(1);
-}
+} */
 .step p a, .quote p a {
 	color:  var(--color-dark-hl);
 	border-bottom:  1px dashed var(--color-dark-hl);

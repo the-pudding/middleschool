@@ -1,5 +1,6 @@
 <script>
 	import { fade } from 'svelte/transition';
+	import { onMount } from "svelte";
 	import Scrolly from "$components/helpers/Scrolly.svelte";
 	import Text from "$components/MiddleSchool/MiddleSchool.Text.svelte";
 	import EyeContainer from "$components/MiddleSchool/MiddleSchool.EyeContainer.svelte";
@@ -21,7 +22,7 @@
 	let hlmiddle = "";
 	let hl_kid = copy.hl_kid.split(",").map(Number)
 	let displayedValues = Object.fromEntries(allGrades.map(g => [g, 0]));
-
+	let prefersReducedMotion = false;
 
 	let transformedData = data.reduce((acc, curr) => {
 	  // Check if the grade level already exists in the accumulator
@@ -50,7 +51,10 @@
 
 	function animateValue(grade, newValue) {
 	    if (typeof window === "undefined") return; // Prevent errors in SSR or non-browser contexts
-
+	    if (prefersReducedMotion) {
+	    	displayedValues[grade] = Math.round(newValue)
+	    	return;
+	    }
 	    const duration = 1000; // Animation duration in ms
 	    const startValue = displayedValues[grade] ?? 0;
 	    const totalFrames = 60; // Assume 60 FPS
@@ -58,7 +62,7 @@
 	    let frame = 0;
 
 	    if (animationFrames[grade]) {
-	        cancelAnimationFrame(animationFrames[grade]);
+	    	cancelAnimationFrame(animationFrames[grade]);
 	    }
 
 	    function stepAnimation() {
@@ -68,7 +72,7 @@
 	        displayedValues[grade] = Math.round(startValue + step * frame);
 
 	        if (frame < totalFrames) {
-	            animationFrames[grade] = window.requestAnimationFrame(stepAnimation);
+	        	animationFrames[grade] = window.requestAnimationFrame(stepAnimation);
 	        } else {
 	            displayedValues[grade] = Math.round(newValue); // Ensure final value is exact
 	            delete animationFrames[grade]; // Cleanup
@@ -89,6 +93,24 @@
 	}
 
 
+	onMount(() => {
+		const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+		function updatePreference(e) {
+			prefersReducedMotion = e.matches;
+		}
+
+        // Add listener
+		mediaQuery.addListener(updatePreference);
+
+        // Set initial value
+		prefersReducedMotion = mediaQuery.matches;
+
+        // Cleanup function
+		return () => {
+			mediaQuery.removeListener(updatePreference);
+		};
+	});
 
 	let intro = true;
 	let quote = ""
@@ -97,17 +119,17 @@
 	let customSpeed = 200;
 	let talkers = [];
 	$: {
-	    if (typeof value !== "number") {
-	        intro = true;
-	        value = 0;
-	    } else {
-	        intro = false;
-	    }
+		if (typeof value !== "number") {
+			intro = true;
+			value = 0;
+		} else {
+			intro = false;
+		}
 
-	    attribute = copy.story[value]?.attribute || null;
-	    sort_attribute = copy.story[value]?.sort_attribute || attribute;
-	    
-	    excluded = copy.story[value]?.exclude_data ? copy.story[value].exclude_data.split(",").map(Number) : [];
+		attribute = copy.story[value]?.attribute || null;
+		sort_attribute = copy.story[value]?.sort_attribute || attribute;
+
+		excluded = copy.story[value]?.exclude_data ? copy.story[value].exclude_data.split(",").map(Number) : [];
 	    grades = copy.story[value]?.grades.split(",").map(Number); // Ensure grades update before calling animateValue
 
 	    marginLeft = (copy.story[value]?.start - 4) / 3 * -100;
@@ -120,18 +142,18 @@
 	    hlmiddle = kid_id ? "hlmiddle" : "no_hlmiddle";
 
 	    allGrades.forEach((grade) => {
-	        if (excluded.includes(grade)) {
-	            animateValue(grade, 0);
-	        } else if (grades.includes(grade) && attribute) {
-	            const newValue = Math.round(proportions[grade - 4][attribute]) || 0;
-				animateValue(grade, newValue);
-	        }
+	    	if (excluded.includes(grade)) {
+	    		animateValue(grade, 0);
+	    	} else if (grades.includes(grade) && attribute) {
+	    		const newValue = Math.round(proportions[grade - 4][attribute]) || 0;
+	    		animateValue(grade, newValue);
+	    	}
 	    });
 	}
 
 </script>
 <svelte:options runes="{false}" />
-<div class="outsideContainer" bind:clientWidth={oWidth} bind:clientHeight={oHeight} >
+<div class="outsideContainer reducedMotion{prefersReducedMotion}" bind:clientWidth={oWidth} bind:clientHeight={oHeight} >
 	<section id="scrolly">
 		<div class="visualContainer">
 			{#if attribute != "id"}
@@ -168,6 +190,7 @@
 				{oWidth}
 				{oHeight}
 				{hl}
+				{prefersReducedMotion}
 				proportions={proportions[(grade - 4)]}
 				/>
 			</div>
@@ -176,29 +199,29 @@
 		</div>
 
 		{#if intro}
-			<div class="hedContainer" transition:fade>
-				<div class="textBlock">
+		<div class="hedContainer" transition:fade>
+			<div class="textBlock">
 				<h1>{copy.hed}</h1>
 				<h3>by <a href="https://pudding.cool/author/alvin-chang/">alvin chang</a></h3>
-				</div>
-				<div class="scrolldown">
-					↓
-				</div>
 			</div>
+			<div class="scrolldown">
+				↓
+			</div>
+		</div>
 		{/if}
 	</div>
 	<Scrolly bind:value top={0}>
 		{#each copy.story as step_obj, i}
 		{@const active = value === i}
-			{#if step_obj.quote_id}
-				<div class="step quoteStep" class:active>
-					
-				</div>
-			{:else}
-			<div class="step {step_obj.addclass ? step_obj.addclass : 'smallText'}" class:active>
-				<Text copy={step_obj.text} type={step_obj.type} />
-			</div>
-			{/if}
+		{#if step_obj.quote_id}
+		<div class="step quoteStep" class:active>
+
+		</div>
+		{:else}
+		<div class="step {step_obj.addclass ? step_obj.addclass : 'smallText'}" class:active>
+			<Text copy={step_obj.text} type={step_obj.type} />
+		</div>
+		{/if}
 		{/each}
 	</Scrolly>
 </section>
@@ -215,53 +238,53 @@
 		text-align: center;
 		top:  0;
 /* 		background: black; */
-		color: white;
-		padding: 15px 0 15px;
-		font-weight: bold;
-		font-size: 17px;
-		width: 100%;
-	}
-	.metricLevel {
-		width:  100%;
-		text-align:  center;
-		font-size:  25px;
-		height:  25px;
-		padding:  0px;
+color: white;
+padding: 15px 0 15px;
+font-weight: bold;
+font-size: 17px;
+width: 100%;
+}
+.metricLevel {
+	width:  100%;
+	text-align:  center;
+	font-size:  25px;
+	height:  25px;
+	padding:  0px;
 /* 		color: #b30089; */
-		color: black;
+color: black;
 /* 		text-transform: uppercase; */
-		position: absolute;
-		top:  50px;
-	}
-	.metricLevel span {
-		color: var(--color-yellow);
-		padding: 0px 5px;
+position: absolute;
+top:  50px;
+}
+.metricLevel span {
+	color: var(--color-yellow);
+	padding: 0px 5px;
 /* 		font-weight: bold; */
-	}
-	
-	.slidingContainer {
-		transform: translate3d(var(--x), 0, 0);
-  		transition: transform 2000ms cubic-bezier(0.250, 0.100, 0.250, 1.000);
-		position: absolute;
-		width:  100%;
-		left:  0;
-		top:  0;
-		height:  100%;
-		will-change: left;
-		transform: translate3d(0,0,0);
-	}
-	.gradeContainer {
-		width:  33.3333333%;
-		position: absolute;
-		top:  0px;
-		height:  100%;
-		border-left: 2px solid rgba(0,0,0,0);
-		transition: opacity 700ms linear;
-	}
-	.gradeContainer.grade6.no_hlmiddle {
-		border-left: 2px solid rgba(255,255,255,0.5);
-	}
-	.gradeContainer.grade9.no_hlmiddle {
-		border-left: 2px solid rgba(255,255,255,0.5);
-	}
+}
+
+.slidingContainer {
+	transform: translate3d(var(--x), 0, 0);
+	transition: transform 2000ms cubic-bezier(0.250, 0.100, 0.250, 1.000);
+	position: absolute;
+	width:  100%;
+	left:  0;
+	top:  0;
+	height:  100%;
+	will-change: left;
+	transform: translate3d(0,0,0);
+}
+.gradeContainer {
+	width:  33.3333333%;
+	position: absolute;
+	top:  0px;
+	height:  100%;
+	border-left: 2px solid rgba(0,0,0,0);
+	transition: opacity 700ms linear;
+}
+.gradeContainer.grade6.no_hlmiddle {
+	border-left: 2px solid rgba(255,255,255,0.5);
+}
+.gradeContainer.grade9.no_hlmiddle {
+	border-left: 2px solid rgba(255,255,255,0.5);
+}
 </style>

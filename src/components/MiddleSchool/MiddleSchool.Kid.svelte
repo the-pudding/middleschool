@@ -3,7 +3,7 @@
 	import { fade } from 'svelte/transition';
 	import Eye from "$components/MiddleSchool/MiddleSchool.Eye.svelte";
 	import Text from "$components/MiddleSchool/MiddleSchool.Text.svelte";
-	export let d, attribute, positionLookup, kid_id, exclude, grade, sort_attribute, quote, quote_id, value, grades, talkers, hl_kid, zoomed;
+	export let d, attribute, positionLookup, kid_id, exclude, grade, sort_attribute, quote, quote_id, value, grades, talkers, hl_kid, zoomed, prefersReducedMotion;
 	let rand = seededRandom(d.id + 8);
 	let rand2 = seededRandom(d.id + 2);
 	let rand3 = seededRandom(d.id + 1);
@@ -187,7 +187,9 @@
 	}
 
 	onMount(() => {
-    	animationFrame = requestAnimationFrame(checkMeander);
+		if (!prefersReducedMotion) {
+			animationFrame = requestAnimationFrame(checkMeander);	
+		}
 	});
 
 	onDestroy(() => {
@@ -208,10 +210,10 @@
 		} else {
 			quotePosition = ["left",0];
 		}
-		if (zoomed == "") {
+		if (zoomed == "" || zoomed == 1) {
 			scale = 1;
 		} else {
-			scale = 1 / Number(zoomed.replace("zoomed",""));	
+			scale = 1 / Number(zoomed.replace("15","1.5").replace("zoomed",""));	
 		}
 	}
 </script>
@@ -225,7 +227,7 @@ z-index: {positionLookup.z};
 width: {positionLookup.w}px;
 height: {positionLookup.h}px;
 opacity: {positionLookup.opacity};
-transition: transform {Math.round(positionLookup.speed + 300*rand2)}ms cubic-bezier(0.420, 0.000, 0.580, 1.000), background 500ms linear, opacity 1500ms linear; 
+transition: height {Math.round(positionLookup.speed + 300*rand2)}ms cubic-bezier(0.420, 0.000, 0.580, 1.000), width {Math.round(positionLookup.speed + 300*rand2)}ms cubic-bezier(0.420, 0.000, 0.580, 1.000), transform {Math.round(positionLookup.speed + 300*rand2)}ms cubic-bezier(0.420, 0.000, 0.580, 1.000), background 500ms linear, opacity 1500ms linear; 
 ">
 <div class="face" style="background: {color}; transform: translate({Math.round(tx)}%,{Math.round(ty)}%); width: {Math.round(64 + rand*5) }%; left: { Math.round((100 - (64 + rand*5))/2) }%;">
 	<Eye side="left" {color} {rand} {rand2} {rand3} light={positionLookup.light} {grade}/>
@@ -241,8 +243,7 @@ transition: transform {Math.round(positionLookup.speed + 300*rand2)}ms cubic-bez
 
 {#if hl_kid.includes(d.id)}
 	<div class="quote {quotePosition[0]}" style="
-	left: {positionLookup.x - positionLookup.w / 10.5 + quotePosition[1]}px;
-	top: {positionLookup.y + positionLookup.h + 20}px;
+	transform: translate3d({positionLookup.x - positionLookup.w / 10.5 + quotePosition[1]}px, {positionLookup.y + positionLookup.h + 20}px,0) scale({scale});
 /* 	transform: scale({scale}); */
 	opacity: {quoteOpacity};
 	transition: transform {Math.round(positionLookup.speed + 500*rand2)}ms cubic-bezier(0.420, 0.000, 0.580, 1.000);
