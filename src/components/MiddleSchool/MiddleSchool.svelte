@@ -88,7 +88,7 @@
 		return 0;
 	}
 
-	
+
 
 	let intro = true;
 	let quote = ""
@@ -176,13 +176,15 @@
 		</div>
 
 		{#if intro}
-		<div class="hedContainer" transition:fade>
-			<h1>{copy.hed}</h1>
-			<h3>by <a href="https://pudding.cool/author/alvin-chang/">alvin chang</a></h3>
-			<div class="scrolldown">
-				↓
+			<div class="hedContainer" transition:fade>
+				<div class="textBlock">
+				<h1>{copy.hed}</h1>
+				<h3>by <a href="https://pudding.cool/author/alvin-chang/">alvin chang</a></h3>
+				</div>
+				<div class="scrolldown">
+					↓
+				</div>
 			</div>
-		</div>
 		{/if}
 	</div>
 	<Scrolly bind:value top={0}>

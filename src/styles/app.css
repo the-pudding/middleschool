@@ -90,7 +90,6 @@ html, #content, header {
 
 html {
 	overflow-x: hidden;
-	background: var(--bgcolor);
 }
 #content {
 	font-family: var(--sans) !important;
@@ -109,9 +108,17 @@ html {
 .visualContainer .hedContainer {
 	position: absolute;
 	width:  100%;
+	height: 100vh;
 	text-align:  center;
-	bottom: 75%;
+	top: 0%;
 	color:  var(--color-light);
+}
+.visualContainer .hedContainer .textBlock {
+	bottom: 75%;
+	left: 0px;
+	width: 100%;
+	position: absolute;
+	margin: 0 auto;
 }
 .hedContainer h1 {
 	font-size:  20px;
@@ -135,9 +142,9 @@ html {
 
 .scrolldown {
 	color: var(--color-hl);
-	position: fixed;
+	position: absolute;
 	width: 100%;
-	bottom: 10%;
+	bottom: 200px;
 	text-align: center;
 	opacity: 0.5;
 	font-size: 2.5rem;
@@ -146,13 +153,13 @@ html {
 
 .step {
 	pointer-events: none;
-height: auto;
-font-size: 17px;
-line-height: 22px;
-min-height: 0vh;
-position: relative;
-padding: 30vh 0 100vh;
-box-sizing: content-box;
+	height: auto;
+	font-size: 17px;
+	line-height: 22px;
+	min-height: 0vh;
+	position: relative;
+	padding: 30vh 0 100vh;
+	box-sizing: content-box;
 }
 @media screen and (max-width: 860px) {
 	.step {
@@ -168,18 +175,35 @@ box-sizing: content-box;
 	display:  none;
 }
 .bigText.step {
-	background: linear-gradient(
-		to bottom,
-		transparent 0%, /* Start with the background color */
-		var(--bgcolor) 5%, /* Fade to transparent at the top */
-		var(--bgcolor) 95%, /* Background color in the middle */
-		transparent 100% /* Fade to transparent at the bottom */
-	);
+	background: var(--bgcolor);
 	min-height: 100vh;
-	height: 100%;
 	margin: 30vh 0;
 	/* 	padding:  50vh 0; */
 	position: relative;
+}
+.bigText.step::before {
+	content: "";
+	position: absolute;
+	bottom: 100%;
+	height: 40vh;
+	width: 100%;
+	background: linear-gradient(
+		to top,
+		var(--bgcolor) 30%, 
+		transparent 100%
+	);
+}
+.bigText.step::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	height: 30vh;
+	width: 100%;
+	background: linear-gradient(
+		to top,
+		transparent 0%, 
+		var(--bgcolor) 60%
+	);
 }
 .bigText.step .textContainer {
 	left:  50%;
@@ -194,6 +218,7 @@ box-sizing: content-box;
 	width: 100%;
 	box-shadow: none;
 	line-height: 1.5rem;
+	pointer-events: all;
 }
 .bigText.step .textContainer p a {
 	color:  var(--color-hl);
@@ -255,7 +280,7 @@ position: relative;
 	.quote {
 		font-size: 16px;
 		line-height:  20px;
-		min-width: 150%;
+/* 		min-width: 150%; */
 		padding: 1rem;
 	}
 }

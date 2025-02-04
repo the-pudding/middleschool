@@ -204,7 +204,7 @@
 			quoteOpacity = 0;
 		}
 		if ( (grades.indexOf(grade) / grades.length >= 0.5 || grades.length == 1) && kid_id == null) {
-			quotePosition = ["right",-100];
+			quotePosition = ["right",-50];
 		} else {
 			quotePosition = ["left",0];
 		}
