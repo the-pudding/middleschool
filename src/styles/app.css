@@ -180,16 +180,17 @@ html {
 	margin: 30vh 0;
 	/* 	padding:  50vh 0; */
 	position: relative;
+	padding: 5vh 0;
 }
 .bigText.step::before {
 	content: "";
 	position: absolute;
 	bottom: 100%;
-	height: 40vh;
+	height: 30vh;
 	width: 100%;
 	background: linear-gradient(
 		to top,
-		var(--bgcolor) 30%, 
+		var(--bgcolor) 50%, 
 		transparent 100%
 	);
 }
@@ -202,14 +203,14 @@ html {
 	background: linear-gradient(
 		to top,
 		transparent 0%, 
-		var(--bgcolor) 60%
+		var(--bgcolor) 100%
 	);
 }
 .bigText.step .textContainer {
-	left:  50%;
+	/* left:  50%;
 	top:  50%;
 	position: absolute;
-	transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%); */
 	background:  none;
 	color: var(--color-light);
 	border:  none;
@@ -219,6 +220,7 @@ html {
 	box-shadow: none;
 	line-height: 1.5rem;
 	pointer-events: all;
+	margin: 0 auto;
 }
 .bigText.step .textContainer p a {
 	color:  var(--color-hl);
@@ -270,8 +272,9 @@ position: relative;
 	pointer-events: all;
 	border-radius: 10px;
 	padding: 1.2rem;
-	min-width: 150px;
-	max-width: 400px;
+/* 	min-width: 150px;
+	max-width: 400px; */
+	width: 300px;
 	transform-origin: top left;
 	z-index:  999;
 }
@@ -282,6 +285,7 @@ position: relative;
 		line-height:  20px;
 /* 		min-width: 150%; */
 		padding: 1rem;
+		width: 250px;
 	}
 }
 @media screen and (max-width: 600px) {
@@ -289,6 +293,15 @@ position: relative;
 		font-size: 15px;
 		line-height:  19px;
 		padding: 0.8rem;
+		width: 200px;
+	}
+}
+@media screen and (max-width: 600px) {
+	.quote {
+		font-size: 15px;
+		line-height:  19px;
+		padding: 0.8rem;
+		width: 150px;
 	}
 }
 .quote::after {
