@@ -133,7 +133,9 @@
 
 			<section class="links">
 				<div class="img-wrapper">
-					<span class="wordmark">{@html wordmark}</span>
+
+					<span class="wordmark">
+          <a href="https://pudding.cool/">{@html wordmark}</a></span>
 				</div>
 				<div class="inner">
 					<div class="about">

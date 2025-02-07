@@ -222,9 +222,9 @@ html {
 	max-width: 600px;
 	width: 100%;
 	box-shadow: none;
-	line-height: 1.5rem;
+	line-height: 1.6rem;
 	pointer-events: all;
-	margin: 0 auto;
+	margin: 60px auto;
 }
 .bigText.step .textContainer p a {
 	color:  var(--color-hl);
@@ -237,19 +237,17 @@ html {
 .smallText.step .textContainer {
 	background:  #fff;
 	color:  var(--color-dark);
-	/* 	border:  1px solid var(--bgcolor); */
 	max-width: 320px;
 	width: 90%;
 	left: 20px;
 	padding: 1.2rem;
-/* 	line-height: 1.6em; */
-box-shadow: 0px 0px 10px -6px #000;
-pointer-events: all;
-border-radius: 10px;
-position: relative;
+	box-shadow: 0px 0px 10px -6px #000;
+	pointer-events: all;
+	border-radius: 10px;
+	position: relative;
 }
 .smallText.step {
-	padding:  50vh 0 90vh;
+	padding:  50vh 0 50vh;
 }
 .smallText.step .textContainer::after {
 	content: '';
@@ -264,7 +262,9 @@ position: relative;
 	transform: rotate(270deg);
 }
 .quoteStep.step {
-	padding: 30vh 0 40vh;
+	margin-top: 0vh;
+	padding: 20vh 0 20vh;
+/* 	background: rgba(255,0,0,0.3); */
 }
 .quote {
 	position: absolute;
