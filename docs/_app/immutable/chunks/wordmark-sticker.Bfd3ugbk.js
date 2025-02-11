@@ -1,34 +1,4 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	
-		<link href="../../_app/immutable/assets/0.bx5VTKoT.css" rel="stylesheet">
-		<link href="../../_app/immutable/assets/4.BosP74pi.css" rel="stylesheet">
-		<link rel="modulepreload" href="../../_app/immutable/entry/start.D7DFgJkS.js">
-		<link rel="modulepreload" href="../../_app/immutable/chunks/entry.Bemki8Wb.js">
-		<link rel="modulepreload" href="../../_app/immutable/chunks/runtime.D-wqT0Z4.js">
-		<link rel="modulepreload" href="../../_app/immutable/chunks/paths.4JpSRjz8.js">
-		<link rel="modulepreload" href="../../_app/immutable/entry/app.CvVah6s5.js">
-		<link rel="modulepreload" href="../../_app/immutable/chunks/store.CZEifyOT.js">
-		<link rel="modulepreload" href="../../_app/immutable/chunks/template.DAu_Bb2-.js">
-		<link rel="modulepreload" href="../../_app/immutable/chunks/disclose-version.Bg9kRutz.js">
-		<link rel="modulepreload" href="../../_app/immutable/chunks/this.B9B4uxPY.js">
-		<link rel="modulepreload" href="../../_app/immutable/chunks/svelte-component.CNzvRgKM.js">
-		<link rel="modulepreload" href="../../_app/immutable/chunks/props.BEVnX3CJ.js">
-		<link rel="modulepreload" href="../../_app/immutable/chunks/index-client.DaeQ5wWR.js">
-		<link rel="modulepreload" href="../../_app/immutable/nodes/0.D52yKjz3.js">
-		<link rel="modulepreload" href="../../_app/immutable/chunks/snippet.DakLtj0t.js">
-		<link rel="modulepreload" href="../../_app/immutable/chunks/wordmark-sticker.Bfd3ugbk.js">
-		<link rel="modulepreload" href="../../_app/immutable/nodes/4.COLD4nam.js">
-</head>
-
-<body>
-	<a href="#content" class="skip-to-main">Skip to main content</a>
-	<div><!--[--><!--[--><!----><header class="svelte-13cc1h5"><div class="wordmark svelte-13cc1h5"><a href="https://pudding.cool" aria-label="The Pudding" target="_self" class="svelte-13cc1h5"><!----><svg width="440" height="154" viewBox="0 0 440 154" fill="none" xmlns="http://www.w3.org/2000/svg">
+const C=`<svg width="440" height="154" viewBox="0 0 440 154" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g filter="url(#filter0_dddd_2683_3457)">
 <path d="M419.179 89.0732C418.309 77.0032 421.719 64.3932 416.939 52.6432C412.389 41.9632 399.909 28.5632 387.839 28.1532C378.829 27.7132 370.779 33.2332 361.559 33.4432C357.139 33.6532 352.779 32.8232 348.399 32.3832C344.679 31.9832 340.849 32.2432 337.209 31.3232C331.729 30.0832 327.949 25.7432 322.859 23.0932C315.649 19.2732 307.089 19.7632 299.189 20.5432C293.389 21.0932 287.859 21.4032 282.359 23.3732C277.759 25.0132 272.959 25.8132 268.199 24.2632C259.289 20.7232 248.499 20.5132 240.439 26.0232C237.709 27.8032 235.119 29.9832 232.109 31.2132C227.209 33.3532 221.799 32.3032 216.459 32.2332C210.839 32.0232 205.109 32.3832 199.569 31.2532C193.299 30.0132 187.709 26.5632 181.289 24.9932C169.189 21.9032 155.349 22.3932 144.789 29.4432C139.769 32.3932 134.009 32.0032 128.409 31.8632C123.249 31.8332 118.039 33.5332 113.049 33.4932C106.969 33.6832 102.089 29.6032 97.2191 26.4732C86.0291 18.5732 72.0991 22.2832 59.4291 22.9732C41.8091 23.0932 24.5191 22.7332 20.4491 44.2332C19.3591 50.8132 20.2891 57.8632 22.8491 64.0232C24.3491 67.6432 26.2091 71.1232 26.9191 75.0032C28.0491 81.1832 27.0891 87.7732 29.1791 93.8332C31.6491 101.553 36.8191 107.893 42.9991 112.833C49.0291 117.583 56.3591 119.563 63.7791 119.473C78.0891 118.903 92.4891 119.863 106.709 119.573C111.869 119.413 116.989 118.473 122.149 118.413C127.749 118.273 133.279 119.563 138.859 119.753C145.269 120.003 151.679 118.383 158.059 118.593C164.949 118.803 171.959 120.153 178.789 118.553C184.579 117.243 188.909 114.113 194.469 115.383C198.809 116.353 203.729 119.103 208.589 119.393C214.759 120.033 221.149 119.333 227.449 119.303C234.359 119.143 241.309 119.433 247.819 119.423C275.509 119.173 303.199 119.443 330.779 119.633C337.989 119.943 345.659 118.653 352.509 121.313C356.169 122.743 359.139 125.583 362.979 127.913C382.949 140.433 414.489 131.633 419.329 106.933C420.619 101.123 419.699 95.1232 419.199 89.2832V89.0932L419.179 89.0732Z" fill="url(#paint0_radial_2683_3457)"/>
 </g>
@@ -81,56 +51,4 @@
 </radialGradient>
 </defs>
 </svg>
-<!----></a></div></header><!----> <main id="content"><!----><div class="wrapper svelte-p95kjz"><h1>Default Element Styles</h1> <section id="text"><article id="text--headings" class="svelte-p95kjz"><h2 class="svelte-p95kjz">Headings</h2> <div><h1>Heading 1</h1> <h2>Heading 2</h2> <h3>Heading 3</h3> <h4>Heading 4</h4> <h5>Heading 5</h5> <h6>Heading 6</h6></div></article> <article id="text--paragraphs" class="svelte-p95kjz"><h2 class="svelte-p95kjz">Paragraphs</h2> <div><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc viverra
-					viverra nisl, vel maximus turpis ornare a. Ut scelerisque lectus sed
-					odio dictum scelerisque vitae quis nisi. Nulla facilisi. Phasellus
-					vehicula convallis nisl, id suscipit dui semper at. In eu iaculis
-					lorem. In vehicula sed mauris et suscipit. Vivamus pellentesque non
-					massa sit amet ornare. Integer placerat est vitae nisl molestie, eget
-					rhoncus erat vulputate. Proin ornare massa eget bibendum faucibus.</p></div></article> <article id="text--blockquotes" class="svelte-p95kjz"><h2 class="svelte-p95kjz">Blockquotes</h2> <div><blockquote><p>Etiam porttitor egestas elit, at venenatis neque accumsan eu. Nulla
-						viverra odio nisi, quis commodo tellus tristique non. Proin ac ante
-						at orci euismod eleifend. Quisque nisi sapien, dapibus in venenatis
-						sit amet, posuere non purus. In sit amet metus erat. Pellentesque
-						nec neque eleifend, luctus ipsum at, ullamcorper nunc. Pellentesque
-						sagittis, dolor eu bibendum lacinia, orci ex bibendum risus, at
-						tincidunt augue lacus eleifend diam. Nulla facilisis velit ut est
-						auctor sollicitudin. Morbi eget lectus a lacus maximus molestie in
-						ut lorem.</p> <p>Vestibulum ut erat sapien. Duis eros est, tempus a rutrum eu,
-						rhoncus at ante. Vestibulum congue vel nunc et dapibus. Ut tristique
-						facilisis orci ac pretium. Nunc et sodales turpis. Nulla pretium
-						augue vitae faucibus tempor. Aliquam convallis mollis feugiat. Ut
-						non pellentesque sem. Suspendisse interdum, neque at hendrerit
-						varius, enim neque imperdiet enim, pellentesque efficitur leo orci
-						non erat.</p> <cite>Said no one, ever.</cite></blockquote></div></article> <article id="text--lists" class="svelte-p95kjz"><h2 class="svelte-p95kjz">Lists</h2> <div><h3>Definition list</h3> <dl><dt>Definition List Title</dt> <dd>This is a definition list division.</dd></dl> <h3>Ordered List</h3> <ol><li>List Item 1</li> <li>List Item 2</li> <li>List Item 3 <ol><li>Nested Ordered List Item 3.1</li> <li>Nested Ordered List Item 3.2</li> <li>Nested Ordered List Item 3.3</li></ol></li> <li>List Item 4 <ul><li>Nested Unordered List Item 4.1</li> <li>Nested Unordered List Item 4.2</li> <li>Nested Unordered List Item 4.3</li></ul></li></ol> <h3>Unordered List</h3> <ul><li>List Item 1</li> <li>List Item 2</li> <li>List Item 3 <ol><li>Nested Ordered List Item 3.1</li> <li>Nested Ordered List Item 3.2</li> <li>Nested Ordered List Item 3.3</li></ol></li> <li>List Item 4 <ul><li>Nested Unordered List Item 4.1</li> <li>Nested Unordered List Item 4.2</li> <li>Nested Unordered List Item 4.3</li></ul></li></ul></div></article> <article id="text--hr" class="svelte-p95kjz"><h2 class="svelte-p95kjz">Horizontal rules</h2> <div><hr></div></article> <article id="text--tables" class="svelte-p95kjz"><h2 class="svelte-p95kjz">Tabular data</h2> <table><caption>Table Caption</caption><thead><tr><th>Table Heading 1</th><th>Table Heading 2</th><th>Table Heading 3</th><th>Table Heading 4</th><th>Table Heading 5</th></tr></thead><tbody><tr><td>Table Cell 1</td><td>Table Cell 2</td><td>Table Cell 3</td><td>Table Cell 4</td><td>Table Cell 5</td></tr><tr><td>Table Cell 1</td><td>Table Cell 2</td><td>Table Cell 3</td><td>Table Cell 4</td><td>Table Cell 5</td></tr><tr><td>Table Cell 1</td><td>Table Cell 2</td><td>Table Cell 3</td><td>Table Cell 4</td><td>Table Cell 5</td></tr><tr><td>Table Cell 1</td><td>Table Cell 2</td><td>Table Cell 3</td><td>Table Cell 4</td><td>Table Cell 5</td></tr></tbody></table></article> <article id="text--inline" class="svelte-p95kjz"><h2 class="svelte-p95kjz">Inline elements</h2> <div><a href="./">This is a text link</a>.<br> <strong>Strong is used to indicate strong importance.</strong><br> <em>This text has added emphasis.</em><br> The <b>b element</b> is stylistically different text from normal text,
-				without any special importance.<br> The <i>i element</i> is text that is offset from the normal text.<br> The <u>u element</u> is text with an unarticulated, though explicitly
-				rendered, non-textual annotation.<br> <del>This text is deleted</del> and <ins>This text is inserted</ins>.<br> <s>This text has a strikethrough</s>.<br> Superscript<sup>®</sup>.<br> Subscript for things like H<sub>2</sub>O.<br> <small>This small text is small for for fine print, etc.</small><br> Abbreviation: <abbr title="HyperText Markup Language">HTML</abbr><br> <q cite="https://developer.mozilla.org/en-US/docs/HTML/Element/q">This text is a short inline quotation.</q><br> <cite>This is a citation.</cite><br> The <dfn>dfn element</dfn> indicates a definition.<br> The <mark>mark element</mark> indicates a highlight.<br> The <var>variable element</var>, such as <var>x</var> = <var>y</var>.<br> The time element: <time datetime="2013-04-06T12:32+00:00">2 weeks ago</time><br></div></article></section> <section id="forms"><h2>Form elements</h2> <form><fieldset id="forms--input"><legend>Input fields</legend> <p><label for="input--text">Text Input</label> <input id="input--text" type="text" placeholder="Text Input"></p> <p><label for="input--password">Password</label> <input id="input--password" type="password" placeholder="Type your Password"></p> <p><label for="input--webaddress">Web Address</label> <input id="input--webaddress" type="url" placeholder="http://yoursite.com"></p> <p><label for="input--emailaddress">Email Address</label> <input id="input--emailaddress" type="email" placeholder="name@email.com"></p> <p><label for="input--phone">Phone Number</label> <input id="input--phone" type="tel" placeholder="(999) 999-9999"></p> <p><label for="input--search">Search</label> <input id="input--search" type="search" placeholder="Enter Search Term"></p> <p><label for="input--text2">Number Input</label> <input id="input--text2" type="number" placeholder="Enter a Number"></p> <p><label for="input--text3" class="error">Error</label> <input id="input--text3" class="is-error" type="text" placeholder="Text Input"></p> <p><label for="input--text4" class="valid">Valid</label> <input id="input--text4" class="is-valid" type="text" placeholder="Text Input"></p></fieldset> <fieldset id="forms--select"><legend>Select menus</legend> <p><label for="select">Select</label> <select id="select"><optgroup label="Option Group"><option>Option One</option> <option>Option Two</option> <option>Option Three</option></optgroup></select></p></fieldset> <fieldset id="forms--checkbox"><legend>Checkboxes</legend> <ul class="list list--bare"><li><label for="checkbox1"><input id="checkbox1" name="checkbox" type="checkbox" checked="checked"> Choice A</label></li> <li><label for="checkbox2"><input id="checkbox2" name="checkbox" type="checkbox"> Choice B</label></li> <li><label for="checkbox3"><input id="checkbox3" name="checkbox" type="checkbox"> Choice C</label></li></ul></fieldset> <fieldset id="forms--radio"><legend>Radio buttons</legend> <ul class="list list--bare"><li><label for="radio1"><input id="radio1" name="radio" type="radio" class="radio" checked="checked"> Option 1</label></li> <li><label for="radio2"><input id="radio2" name="radio" type="radio" class="radio"> Option
-							2</label></li> <li><label for="radio3"><input id="radio3" name="radio" type="radio" class="radio"> Option
-							3</label></li></ul></fieldset> <fieldset id="forms--textareas"><legend>Textareas</legend> <p><label for="textarea">Textarea</label> <textarea id="textarea" rows="8" cols="48" placeholder="Enter your message here"></textarea></p></fieldset> <fieldset id="forms--html5"><legend>HTML5 inputs</legend> <p><label for="ic">Color input</label> <input type="color" id="ic" value="#000000"></p> <p><label for="in">Number input</label> <input type="number" id="in" min="0" max="10" value="5"></p> <p><label for="ir">Range input</label> <input type="range" id="ir" value="10"></p> <p><label for="idd">Date input</label> <input type="date" id="idd" value="1970-01-01"></p> <p><label for="idm">Month input</label> <input type="month" id="idm" value="1970-01"></p> <p><label for="idw">Week input</label> <input type="week" id="idw" value="1970-W01"></p> <p><label for="idt">Datetime input</label> <input type="datetime" id="idt" value="1970-01-01T00:00:00Z"></p> <p><label for="idtl">Datetime-local input</label> <input type="datetime-local" id="idtl" value="1970-01-01T00:00"></p></fieldset> <fieldset id="forms--action"><legend>Action buttons</legend> <p><input type="submit" value="&lt;input type=submit>"> <input type="button" value="&lt;input type=button>"> <input type="reset" value="&lt;input type=reset>"> <input type="submit" value="&lt;input disabled>" disabled="true"></p> <p><button type="submit">&lt;button type=submit></button> <button type="button">&lt;button type=button></button> <button type="reset">&lt;button type=reset></button> <button type="button" disabled="true">&lt;button disabled></button></p></fieldset></form></section></div><!----><!----></main><!----><!--]--> <!--[!--><!--]--><!--]-->
-			
-			<script>
-				{
-					__sveltekit_1vxedzz = {
-						base: new URL("../..", location).pathname.slice(0, -1)
-					};
-
-					const element = document.currentScript.parentElement;
-
-					const data = [null,null];
-
-					Promise.all([
-						import("../../_app/immutable/entry/start.D7DFgJkS.js"),
-						import("../../_app/immutable/entry/app.CvVah6s5.js")
-					]).then(([kit, app]) => {
-						kit.start(app, element, {
-							node_ids: [0, 4],
-							data,
-							form: null,
-							error: null
-						});
-					});
-				}
-			</script>
-		</div>
-</body>
-
-</html>
+`;export{C as w};
