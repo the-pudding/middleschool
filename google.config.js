@@ -4,6 +4,10 @@ export default [
 		"filepath": "src/data/copy.json"
 	},
 	{
+		"id": "1wk-Z1ZhmzfciKhLhEZEa4ch_Yqc8qaiwhFxUl2JIJt4",
+		"filepath": "src/data/video_copy.json"
+	},
+	{
 		"id": "176OwTV_abBSWm-dXYBKF1S2DV07_b_0VZubuk4Yn1KU",
 		"gid": "0",
 		"filepath": "src/data/data.csv"

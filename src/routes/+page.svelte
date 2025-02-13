@@ -4,6 +4,7 @@
 	import Meta from "$components/Meta.svelte";
 	import Index from "$components/Index.svelte";
 	import copy from "$data/copy.json";
+	import videocopy from "$data/video_copy.json";
 	import version from "$utils/version.js";
 
 	let { data } = $props();
@@ -19,6 +20,7 @@
 
 	const { title, description, url, keywords } = copy;
 	setContext("copy", copy);
+	setContext("videocopy", videocopy);
 	setContext("data", data);
 </script>
 
