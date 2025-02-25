@@ -115,22 +115,23 @@
 	  position: relative;
 	  display: inline-block; /* Shrinks to fit content */
 	  word-wrap: break-word; /* Ensures text wraps within the max-width */
-	  font-size: 25px;
-		line-height: 37px;
+	  font-size: 30px;
+		line-height: 40px;
 		position: absolute !important;
 		top: 30%;
 		left: 10px;
+		display: none;
 	}
 
 	.textContainer.inner {
 	  background: #fff;
 	  color: var(--color-dark);
-	  max-width: 420px !important;
+/* 	  max-width: 420px !important; */
 	  width: auto !important; /* Allows the container to resize based on content */
 	  display: inline-block; /* Shrinks to fit content */
 	  word-wrap: break-word; /* Ensures text wraps within the max-width */
-	  font-size: 25px;
-	line-height: 37px;
+	  font-size: 30px;
+	line-height: 40px;
 	}
 
 </style>

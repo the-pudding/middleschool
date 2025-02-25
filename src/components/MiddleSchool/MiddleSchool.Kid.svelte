@@ -226,7 +226,6 @@
 		} else {
 			positionAdjust = 0;
 		}
-		console.log(quote)
 	}
 </script>
 

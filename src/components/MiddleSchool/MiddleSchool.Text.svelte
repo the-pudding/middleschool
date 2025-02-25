@@ -10,7 +10,7 @@
 			let textArray = text.split(/\n/); // Split by single newlines
 			textArray.forEach(function (line) {
 				// Convert Markdown links [text](url) to HTML <a> tags
-				line = line.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+				line = line.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
 
 				// Convert Markdown bold **bold** to HTML <strong> tags
 				line = line.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');

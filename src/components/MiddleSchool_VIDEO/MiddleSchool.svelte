@@ -97,9 +97,9 @@
 	onMount(() => {
 
 		setInterval(function() {
-			currentTime += 1/33.333333333333;
+			currentTime += 0.01;
 			checkNextStage();
-		},33.333333333333);
+		},10);
 		window.addEventListener('keydown', handleKeydown);
 
 		  return () => {
@@ -126,13 +126,13 @@
 
 	function checkNextStage() {
 		nextTime = parseTime(copy.story[value + 1].time);
-		if ( nextTime < currentTime) {
+		if ( nextTime <= currentTime) {
 			value += 1;
 		}
 	}
 
 	function parseTime(t) {
-		return Number(t.split(".")[0]) + Number(t.split(".")[1]/30);
+		return Number(t.split(".")[0])*60 + Number(t.split(".")[1]) + Number(t.split(".")[2]/30);
 	}
 
 
@@ -290,10 +290,11 @@
 		position: relative;
 	}
 	.visualContainer {
-		margin: 0 auto;
+		margin: 0px auto;
 		width: 1920px;
 		height: 1280px;
-		padding: 80px 0;
+		padding: 0px 0;
+/* 		border: 1px solid red; */
 	}
 	.metricName {
 		position: fixed;

@@ -330,4 +330,7 @@ transition: height {Math.round(positionLookup.speed + 300*rand2)}ms cubic-bezier
 		font-weight:  bold;
 		text-shadow:  0px 0px 8px #000;
 	}
+	.quote {
+		min-width: 400px;
+	}
 </style>

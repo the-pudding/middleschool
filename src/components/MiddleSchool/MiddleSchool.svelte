@@ -1,6 +1,6 @@
 <script>
 	import { fade } from 'svelte/transition';
-	import { onMount } from "svelte";
+	import { onMount, onDestroy } from "svelte";
 	import Scrolly from "$components/helpers/Scrolly.svelte";
 	import Text from "$components/MiddleSchool/MiddleSchool.Text.svelte";
 	import EyeContainer from "$components/MiddleSchool/MiddleSchool.EyeContainer.svelte";
@@ -92,8 +92,24 @@
 		return 0;
 	}
 
+	let pastHalfway = false;
+
+    function checkScrollPosition() {
+        const scrollPosition = window.scrollY + window.innerHeight;
+        const totalHeight = document.documentElement.scrollHeight;
+        pastHalfway = (scrollPosition / totalHeight) > 0.5;
+    }
+
 
 	onMount(() => {
+
+		window.addEventListener("scroll", checkScrollPosition);
+        checkScrollPosition(); // Run once in case page is already scrolled
+
+        onDestroy(() => {
+            window.removeEventListener("scroll", checkScrollPosition);
+        });
+
 		const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 		function updatePreference(e) {
@@ -123,6 +139,9 @@
 			intro = true;
 			value = 0;
 		} else {
+			intro = false;
+		}
+		if (pastHalfway) {
 			intro = false;
 		}
 
