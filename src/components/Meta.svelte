@@ -1,7 +1,7 @@
 <script>
 	let {
 		title = "The Middle Ages",
-		description = "Follow hundreds of kids as they navigate their trecherous middle school years.",
+		description = "Follow hundreds of kids as they navigate their treacherous middle school years.",
 		url = "https://pudding.cool/2025/02/middle-school",
 		keywords = "middle school,data,belonging,psychology,education,brain,plasticity,adolescents",
 		preloadFont = []
