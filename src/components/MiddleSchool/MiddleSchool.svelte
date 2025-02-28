@@ -226,6 +226,9 @@
 			<div class="scrolldown">
 				↓
 			</div>
+			<div class="videoTeaser">
+				Don't like scrolling? <a href="https://youtu.be/b4zLknfk05Q">Watch the video instead!</a>
+			</div>
 		</div>
 		{/if}
 	</div>
@@ -305,5 +308,24 @@ top:  50px;
 }
 .gradeContainer.grade9.no_hlmiddle {
 	border-left: 2px solid rgba(255,255,255,0.5);
+}
+.videoTeaser {
+	position: fixed;
+	color: white;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	text-align: center;
+	background: #000;
+	padding: 20px;
+	max-width: 500px;
+	width: 90%;
+	z-index: 999;
+}
+.videoTeaser a {
+	color: #fb04d3;
+}
+.videoTeaser a:hover {
+	opacity: 0.9;
 }
 </style>
