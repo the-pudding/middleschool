@@ -98,6 +98,7 @@
         const scrollPosition = window.scrollY + window.innerHeight;
         const totalHeight = document.documentElement.scrollHeight;
         pastHalfway = (scrollPosition / totalHeight) > 0.5;
+        console.log(pastHalfway)
     }
 
 
